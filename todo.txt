@@ -1,0 +1,7 @@
+timed delay between engagement
+
+multiple response boxes, one per account
+stored response list
+pre-populate
+
+prevent duplicate queue engagements
