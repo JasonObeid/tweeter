@@ -7,13 +7,13 @@ export default async function ReplyTweetEndpoint(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { usernames, tweetId, replyText } = req.query;
+  const { ids, tweetId, replyText } = req.query;
 
   try {
     const userTwitterClients = await getUserTwitterClients(
       supabaseClient,
       twitterClient,
-      Array.isArray(usernames) ? usernames : [usernames],
+      Array.isArray(ids) ? ids : [ids],
     );
     const response = await multiReplyTweet(
       userTwitterClients,

@@ -7,6 +7,7 @@ import { TOAuth2Scope, TwitterApi } from "twitter-api-v2";
 import { TwitterAuth } from "../../config/types";
 
 export interface RefreshedTwitterAuth {
+  id: string;
   username: string;
   client: TwitterApi;
   expiresIn: number;
@@ -17,12 +18,12 @@ export interface RefreshedTwitterAuth {
 
 export async function getUserAuths(
   supabaseClient: SupabaseClient,
-  usernames: string[],
+  ids: string[],
 ) {
   const { data, error }: PostgrestResponse<TwitterAuth> = await supabaseClient
     .from("twitter_auth")
-    .select("access_token,expires_in,refresh_token,username,created_at")
-    .in("username", usernames);
+    .select("access_token,expires_in,refresh_token,id,username,created_at")
+    .in("id", ids);
 
   if (error) {
     throw new Error(error.message);
@@ -44,7 +45,7 @@ export async function storeRefreshedUserAuth(
         refresh_token: refreshedTwitterAuth.refreshToken,
         expires_in: refreshedTwitterAuth.expiresIn,
       })
-      .eq("username", refreshedTwitterAuth.username)
+      .eq("id", refreshedTwitterAuth.id)
       .single();
 
   if (error) {
@@ -97,9 +98,9 @@ export async function getRefreshedClients(
 export async function getUserTwitterClients(
   supabaseClient: SupabaseClient,
   twitterClient: TwitterApi,
-  usernames: string[],
+  ids: string[],
 ) {
-  const staleUserAuths = await getUserAuths(supabaseClient, usernames);
+  const staleUserAuths = await getUserAuths(supabaseClient, ids);
   const { twitterUserClients, refreshedUserAuths } = await getRefreshedClients(
     twitterClient,
     staleUserAuths,
@@ -118,10 +119,10 @@ export async function getUserTwitterClients(
 export async function getUserTwitterClient(
   supabaseClient: SupabaseClient,
   twitterClient: TwitterApi,
-  username: string,
+  id: string,
 ) {
   const clients = await getUserTwitterClients(supabaseClient, twitterClient, [
-    username,
+    id,
   ]);
   return clients[0];
 }

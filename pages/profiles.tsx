@@ -25,9 +25,7 @@ export default function TwitterAccounts() {
                 <h2 className="text-white flex flex-1">{user.username}</h2>
                 <button
                   className="text-white"
-                  onClick={() =>
-                    removeTwitterUserMutation.mutate(user.username)
-                  }
+                  onClick={() => removeTwitterUserMutation.mutate(user.id)}
                 >
                   x
                 </button>

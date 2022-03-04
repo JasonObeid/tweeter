@@ -7,13 +7,13 @@ export default async function RetweetEndpoint(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { usernames, tweetId } = req.query;
+  const { ids, tweetId } = req.query;
 
   try {
     const userTwitterClients = await getUserTwitterClients(
       supabaseClient,
       twitterClient,
-      Array.isArray(usernames) ? usernames : [usernames],
+      Array.isArray(ids) ? ids : [ids],
     );
     const response = await multiRetweet(userTwitterClients, tweetId as string);
     res.status(200).json(response);

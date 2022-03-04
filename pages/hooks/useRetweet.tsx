@@ -8,9 +8,7 @@ export interface RetweetProps {
 }
 export async function retweet({ tweetId, selectedUsers }: RetweetProps) {
   if (tweetId.length > 0 && selectedUsers.length > 0) {
-    const usersParam = selectedUsers
-      .map((user) => `usernames=${user.username}`)
-      .join("&");
+    const usersParam = selectedUsers.map((user) => `ids=${user.id}`).join("&");
     const retweetResult = await get<boolean[]>(
       `/api/twitter/retweet?tweetId=${tweetId}&${usersParam}`,
     );
@@ -22,8 +20,8 @@ export async function retweet({ tweetId, selectedUsers }: RetweetProps) {
 export function useRetweet() {
   const retweetMutation = useMutation(retweet, {
     mutationKey: "retweet",
-    onSuccess: (a) => {
-      console.log(a);
+    onSuccess: (data) => {
+      console.log(data);
     },
     onError: (error) => {
       console.log(error);

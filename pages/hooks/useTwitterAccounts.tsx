@@ -17,8 +17,8 @@ export interface TwitterAuthUser
   is_selected: boolean;
 }
 
-export async function removeUser(username: string) {
-  await get<void>(`/api/twitter/deleteUser?username=${username}`);
+export async function removeUser(id: string) {
+  await get<void>(`/api/twitter/deleteUser?id=${id}`);
 }
 
 export async function getTwitterAuths() {
@@ -49,14 +49,14 @@ export function useTwitterAccounts() {
 
   const removeTwitterUserMutation = useMutation(removeUser, {
     mutationKey: "removeTwitterUser",
-    onSuccess: (a) => {
-      console.log(a);
+    onSuccess: (data) => {
+      console.log(data);
     },
     onError: (error) => {
       console.log(error);
     },
     onMutate: () => {
-      queryClient.invalidateQueries("twitterAccounts");
+      setTimeout(() => queryClient.invalidateQueries("twitterAccounts"), 1500);
     },
   });
 

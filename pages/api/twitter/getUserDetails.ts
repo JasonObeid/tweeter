@@ -6,13 +6,13 @@ export default async function GetUserDetailsEndpoint(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { username } = req.query;
+  const { id } = req.query;
 
   try {
     const userTwitterClient = await getUserTwitterClient(
       supabaseClient,
       twitterClient,
-      username as string,
+      id as string,
     );
     const { data: userObject } = await userTwitterClient.v2.me();
     res.status(200).json(userObject);

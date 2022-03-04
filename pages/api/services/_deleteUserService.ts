@@ -4,14 +4,10 @@ import { TwitterAuth } from "../../config/types";
 
 export async function deleteTwitterAuth(
   supabaseClient: SupabaseClient,
-  username: string,
+  id: string,
 ) {
   const { data, error }: PostgrestSingleResponse<TwitterAuth> =
-    await supabaseClient
-      .from("twitter_auth")
-      .delete()
-      .eq("username", username)
-      .single();
+    await supabaseClient.from("twitter_auth").delete().eq("id", id).single();
 
   if (error) {
     throw new Error(error.message);
@@ -24,9 +20,9 @@ export async function deleteTwitterAuth(
 export async function deleteUser(
   supabaseClient: SupabaseClient,
   twitterClient: TwitterApi,
-  username: string,
+  id: string,
 ) {
-  const deletedAuth = await deleteTwitterAuth(supabaseClient, username);
+  const deletedAuth = await deleteTwitterAuth(supabaseClient, id);
   await twitterClient.revokeOAuth2Token(deletedAuth.access_token);
   // await client.revokeOAuth2Token(data.refresh_token, "refresh_token");
 

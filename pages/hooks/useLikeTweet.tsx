@@ -8,9 +8,7 @@ export interface LikeProps {
 }
 export async function like({ tweetId, selectedUsers }: LikeProps) {
   if (tweetId.length > 0 && selectedUsers.length > 0) {
-    const usersParam = selectedUsers
-      .map((user) => `usernames=${user.username}`)
-      .join("&");
+    const usersParam = selectedUsers.map((user) => `ids=${user.id}`).join("&");
     const likeResult = await get<boolean[]>(
       `/api/twitter/like?tweetId=${tweetId}&${usersParam}`,
     );
@@ -22,8 +20,8 @@ export async function like({ tweetId, selectedUsers }: LikeProps) {
 export function useLikeTweet() {
   const likeMutation = useMutation(like, {
     mutationKey: "like",
-    onSuccess: (a) => {
-      console.log(a);
+    onSuccess: (data) => {
+      console.log(data);
     },
     onError: (error) => {
       console.log(error);

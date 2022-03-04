@@ -13,9 +13,7 @@ export async function replyTweet({
   replyText,
 }: ReplyTweetProps) {
   if (tweetId.length > 0 && selectedUsers.length > 0 && replyText.length > 0) {
-    const usersParam = selectedUsers
-      .map((user) => `usernames=${user.username}`)
-      .join("&");
+    const usersParam = selectedUsers.map((user) => `ids=${user.id}`).join("&");
     const retweetResult = await get<boolean[]>(
       `/api/twitter/reply?replyText=${replyText}&tweetId=${tweetId}&${usersParam}`,
     );
@@ -27,8 +25,8 @@ export async function replyTweet({
 export function useReplyTweetMutation() {
   const replyTweetMutation = useMutation(replyTweet, {
     mutationKey: "replyTweet",
-    onSuccess: (a) => {
-      console.log(a);
+    onSuccess: (data) => {
+      console.log(data);
     },
     onError: (error) => {
       console.log(error);

@@ -7,13 +7,13 @@ export default async function createTweetEndpoint(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { usernames, text } = req.query;
+  const { ids, text } = req.query;
 
   try {
     const userTwitterClients = await getUserTwitterClients(
       supabaseClient,
       twitterClient,
-      Array.isArray(usernames) ? usernames : [usernames],
+      Array.isArray(ids) ? ids : [ids],
     );
     const response = await multiTweet(userTwitterClients, text as string);
     res.status(200).json(response);

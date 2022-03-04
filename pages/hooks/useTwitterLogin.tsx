@@ -47,8 +47,8 @@ export function useTwitterLogin() {
 
   const startLoginFlowMutation = useMutation(startLoginFlow, {
     mutationKey: "startLoginFlow",
-    onSuccess: (a) => {
-      console.log(a);
+    onSuccess: (data) => {
+      console.log(data);
     },
     onError: (error) => {
       console.log(error);
