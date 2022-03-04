@@ -1,15 +1,16 @@
 import { TwitterApi } from "twitter-api-v2";
+import { TwitterAuthUser } from "../../hooks/useTwitterAccounts";
 
 export async function replyTweet(
   userTwitterClient: TwitterApi,
   tweetId: string,
-  replyText: string,
+  user: TwitterAuthUser,
 ) {
   const { data, errors } = await userTwitterClient.v2.tweet({
     reply: {
       in_reply_to_tweet_id: tweetId,
     },
-    text: replyText,
+    text: user.reply_text,
   });
 
   if (errors) {
@@ -23,12 +24,12 @@ export async function replyTweet(
 export async function multiReplyTweet(
   userTwitterClients: TwitterApi[],
   tweetId: string,
-  replyText: string,
+  users: TwitterAuthUser[],
 ) {
   return await Promise.all(
-    userTwitterClients.map(async (userTwitterClient) => {
+    userTwitterClients.map(async (userTwitterClient, index) => {
       try {
-        return await replyTweet(userTwitterClient, tweetId, replyText);
+        return await replyTweet(userTwitterClient, tweetId, users[index]);
       } catch (error) {
         console.error(error);
         return false;

@@ -15,6 +15,7 @@ export interface TwitterAuthUser
     | "session_id"
   > {
   is_selected: boolean;
+  reply_text: string;
 }
 
 export async function removeUser(id: string) {

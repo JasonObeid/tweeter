@@ -20,7 +20,7 @@ export default function TwitterAccounts() {
             return (
               <div
                 key={user.id}
-                className="flex w-36 sm:w-56 mb-6 m-auto content-center"
+                className="flex sm:w-56 sm:m-auto mb-6 sm:mb-6 content-center"
               >
                 <h2 className="text-white flex flex-1">{user.username}</h2>
                 <button

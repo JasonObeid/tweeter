@@ -17,6 +17,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       path: "/profiles",
       label: "Twitter Accounts",
     },
+    {
+      path: "/presets",
+      label: "Preset Replies",
+    },
   ];
 
   return (

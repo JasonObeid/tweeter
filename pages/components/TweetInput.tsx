@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { EngagementType } from "../home";
 import { useCheckTweetId } from "../hooks/useCheckTweetId";
 import { useLikeTweet } from "../hooks/useLikeTweet";
 import { useReplyTweetMutation } from "../hooks/useReplyTweet";
@@ -8,10 +9,8 @@ import {
   useTwitterAccounts,
 } from "../hooks/useTwitterAccounts";
 import { Error } from "./Error";
-import { Spinner } from "./Spinner";
+import { LoadingSpinner } from "./LoadingSpinner";
 import { Success } from "./Success";
-
-export type EngagementType = "reply" | "retweet" | "like";
 
 export const invalidIcon = (
   <svg
@@ -92,12 +91,13 @@ export const retweetIcon = (
 
 export function TweetInput({
   selectedUsers,
+  engagementType,
+  setEngagementType,
 }: {
   selectedUsers: TwitterAuthUser[];
+  engagementType: EngagementType;
+  setEngagementType: Dispatch<SetStateAction<EngagementType>>;
 }) {
-  const [engagementType, setEngagementType] = useState<EngagementType>("like");
-  const [replyText, setReplyText] = useState("");
-
   const { checkTweetIdQuery, tweetId, setTweetId, isTweetIdNotCheckable } =
     useCheckTweetId();
   const { likeMutation } = useLikeTweet();
@@ -110,7 +110,7 @@ export function TweetInput({
     } else if (engagementType === "retweet") {
       retweetMutation.mutate({ tweetId, selectedUsers });
     } else if (engagementType === "reply") {
-      replyTweetMutation.mutate({ tweetId, selectedUsers, replyText });
+      replyTweetMutation.mutate({ tweetId, selectedUsers });
     }
   }
 
@@ -145,7 +145,7 @@ export function TweetInput({
             htmlFor="tweet-url"
             className="flex justify-center content-center gap-2 leading-7 text-sm md:text-base text-gray-400 mb-2"
           >
-            Tweet ID {checkTweetIdQuery.isLoading ? <Spinner /> : null}
+            Tweet ID {checkTweetIdQuery.isLoading ? <LoadingSpinner /> : null}
             {isTweetIdChecked
               ? isTweetIdValid
                 ? validIcon
@@ -209,25 +209,6 @@ export function TweetInput({
             Reply
           </button>
         </div>
-        {engagementType === "reply" ? (
-          <div className="relative mb-4">
-            <label
-              htmlFor="message"
-              className="leading-7 text-sm md:text-base text-gray-400"
-            >
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              value={replyText}
-              onChange={(event) => {
-                setReplyText(event.target.value);
-              }}
-              className="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 h-32 text-base outline-none text-gray-100 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
-            ></textarea>
-          </div>
-        ) : null}
         <button
           className={`capitalize text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none rounded text-md md:text-lg font-medium title ${
             isButtonDisabled
@@ -241,7 +222,7 @@ export function TweetInput({
         </button>
         {retweetMutation.isLoading ? (
           <div className="flex justify-center content-center mt-2">
-            <p className="mr-2">Retweeting...</p> <Spinner />
+            <p className="mr-2">Retweeting...</p> <LoadingSpinner />
           </div>
         ) : (
           <>
@@ -256,7 +237,7 @@ export function TweetInput({
         )}
         {likeMutation.isLoading ? (
           <div className="flex justify-center content-center mt-2">
-            <p className="mr-2">Liking...</p> <Spinner />
+            <p className="mr-2">Liking...</p> <LoadingSpinner />
           </div>
         ) : (
           <>
@@ -271,7 +252,7 @@ export function TweetInput({
         )}
         {replyTweetMutation.isLoading ? (
           <div className="flex justify-center content-center mt-2">
-            <p className="mr-2">Replying...</p> <Spinner />
+            <p className="mr-2">Replying...</p> <LoadingSpinner />
           </div>
         ) : (
           <>
