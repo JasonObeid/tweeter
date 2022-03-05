@@ -1,15 +1,18 @@
+import { NextApiRequest } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { Layout } from "./components/Layout";
+import { LoadingSpinner } from "./components/LoadingSpinner";
 import { useTwitterLogin } from "./hooks/useTwitterLogin";
+
+import EnforceAuthenticated from "./components/EnforceAuthenticated";
+
+export const getServerSideProps = EnforceAuthenticated();
 
 export default function TwitterLogin() {
   const { twitterLoginMutation } = useTwitterLogin();
   const { query } = useRouter();
 
-  console.log(query);
-  console.log(query["state"]);
-  console.log(query["code"]);
   useEffect(() => {
     if (query["state"] !== undefined && query["code"] !== undefined) {
       twitterLoginMutation.mutate({
@@ -23,12 +26,16 @@ export default function TwitterLogin() {
   return (
     <Layout>
       <div>
-        Login page:{" "}
-        {twitterLoginMutation.isLoading
-          ? "loading"
-          : twitterLoginMutation.isSuccess
-          ? "Success"
-          : "failure"}
+        Login page:
+        {twitterLoginMutation.isLoading ? (
+          <div>
+            Logging into twitter <LoadingSpinner />
+          </div>
+        ) : twitterLoginMutation.isSuccess ? (
+          "Success"
+        ) : (
+          "failure"
+        )}
       </div>
     </Layout>
   );

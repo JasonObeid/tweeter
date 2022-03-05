@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useDebounce } from "use-debounce";
 import { get } from "../config/fetch";
+import { useAuthContext } from "../context/AuthContext";
 
 const nonNumeric = new RegExp("[^0-9]");
 export function isNumeric(string: string) {
@@ -13,6 +14,8 @@ export function isNumeric(string: string) {
 }
 
 export function useCheckTweetId() {
+  const { session } = useAuthContext();
+
   const [tweetId, setTweetId] = useState("");
   const [isTweetIdTouched, setIsTweetIdTouched] = useState(false);
   const [debouncedTweetId] = useDebounce(tweetId, 1000);
@@ -22,10 +25,12 @@ export function useCheckTweetId() {
       setIsTweetIdTouched(true);
     }
   }, [debouncedTweetId]);
+
   async function checkTweetId() {
     if (debouncedTweetId.length > 0 && isNumeric(debouncedTweetId)) {
       const checkTweetIdResult = await get<boolean>(
         `/api/twitter/tweetExists?tweetId=${debouncedTweetId}`,
+        { token: session?.access_token },
       );
       return {
         tweetId: debouncedTweetId,

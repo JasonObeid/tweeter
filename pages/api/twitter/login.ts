@@ -1,11 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { login } from "../services/_loginService";
 import { supabaseClient, twitterClient } from "../services/_getClients";
+import { checkAuthentication } from "../services/_checkAuthenticationService";
 
-export default async function LoginEndpoint(
+export default async function TwitterLoginEndpoint(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  await checkAuthentication(req, res);
+
   const { state, code, sessionId } = req.query;
 
   try {

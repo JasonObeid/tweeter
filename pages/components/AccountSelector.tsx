@@ -1,4 +1,4 @@
-import { EngagementType } from "../home";
+import { EngagementType } from "..";
 import { TwitterAuthUser } from "../hooks/useTwitterAccounts";
 import { AccountActionable } from "./AccountActionable";
 import { LoadingSpinner } from "./LoadingSpinner";

@@ -1,5 +1,5 @@
 import React from "react";
-import { EngagementType } from "../home";
+import { EngagementType } from "..";
 import { TwitterAuthUser } from "../hooks/useTwitterAccounts";
 import { MessagePresetDropdown } from "./MessagePresetDropdown";
 

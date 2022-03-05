@@ -1,11 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { checkAuthentication } from "../services/_checkAuthenticationService";
 import { generateAuthLink } from "../services/_generateAuthLinkService";
 import { supabaseClient, twitterClient } from "../services/_getClients";
 
 export default async function GenerateAuthLinkEndpoint(
-  _req: NextApiRequest,
+  req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  await checkAuthentication(req, res);
+
   try {
     const generatedAuthLinkResponse = await generateAuthLink(
       supabaseClient,

@@ -4,6 +4,7 @@ import { PostgrestResponse } from "@supabase/supabase-js";
 import { client } from "../config/supabaseClient";
 import { TwitterAuth } from "../config/types";
 import { get } from "../config/fetch";
+import { useAuthContext } from "../context/AuthContext";
 
 export interface TwitterAuthUser
   extends Omit<
@@ -16,10 +17,6 @@ export interface TwitterAuthUser
   > {
   is_selected: boolean;
   reply_text: string;
-}
-
-export async function removeUser(id: string) {
-  await get<void>(`/api/twitter/deleteUser?id=${id}`);
 }
 
 export async function getTwitterAuths() {
@@ -37,6 +34,8 @@ export async function getTwitterAuths() {
 }
 
 export function useTwitterAccounts() {
+  const { session } = useAuthContext();
+
   const queryClient = useQueryClient();
 
   const twitterAccountsQuery = useQuery("twitterAccounts", getTwitterAuths, {
@@ -48,6 +47,11 @@ export function useTwitterAccounts() {
     onSuccess: (data) => console.log(data),
   });
 
+  async function removeUser(id: string) {
+    await get<void>(`/api/twitter/deleteUser?id=${id}`, {
+      token: session?.access_token,
+    });
+  }
   const removeTwitterUserMutation = useMutation(removeUser, {
     mutationKey: "removeTwitterUser",
     onSuccess: (data) => {

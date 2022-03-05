@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { EngagementType } from "../home";
+import { EngagementType } from "..";
 import { useCheckTweetId } from "../hooks/useCheckTweetId";
 import { useLikeTweet } from "../hooks/useLikeTweet";
 import { useReplyTweetMutation } from "../hooks/useReplyTweet";

@@ -11,18 +11,18 @@ export function MessagePresetDropdown({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const { messagePresetsQuery } = useMessagePresets();
-  const messagePresets = messagePresetsQuery.data || [];
+  const messagePresets = messagePresetsQuery.data ?? [];
 
   return (
-    <div className="w-52 mx-auto sm:w-56 sm:m-auto sm:mb-10 mb-10">
-      <div className="flex justify-between content-center">
+    <div className="mx-auto mb-10 w-52 sm:m-auto sm:mb-10 sm:w-56">
+      <div className="flex content-center justify-between">
         <button
           onClick={() => setIsOpen((isOpen) => !isOpen)}
-          className="flex flex-1 text-ellipsis self-center z-10 p-2 text-gray-700 bg-white border border-transparent rounded-md dark:text-white focus:border-blue-500 focus:ring-opacity-40 dark:focus:ring-opacity-40 focus:ring-blue-300 dark:focus:ring-blue-400 focus:ring dark:bg-gray-800 focus:outline-none"
+          className="z-10 flex flex-1 self-center text-ellipsis rounded-md border border-transparent bg-white p-2 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:bg-gray-800 dark:text-white dark:focus:ring-blue-400 dark:focus:ring-opacity-40"
         >
           {user.reply_text}
           <svg
-            className="w-5 h-5 text-gray-800 dark:text-white ml-auto"
+            className="ml-auto h-5 w-5 text-gray-800 dark:text-white"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
@@ -36,13 +36,13 @@ export function MessagePresetDropdown({
         </button>
       </div>
       {isOpen ? (
-        <div className="absolute w-56  z-20 py-2 bg-white rounded-md shadow-xl dark:bg-gray-800">
+        <div className="absolute z-20  w-56 rounded-md bg-white py-2 shadow-xl dark:bg-gray-800">
           {messagePresets.map((messagePreset) => (
             <button
               key={`dropdown-option-${messagePreset.id}`}
-              className={`flex flex-1 w-full text-ellipsis px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white ${
+              className={`flex w-full flex-1 transform text-ellipsis px-4 py-3 text-sm capitalize text-gray-600 transition-colors duration-200 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white ${
                 messagePreset.message === user.reply_text
-                  ? "ml-2 pl-3 border-l-2 border-l-indigo-500"
+                  ? "ml-2 border-l-2 border-l-indigo-500 pl-3"
                   : ""
               }`}
               onClick={() => {

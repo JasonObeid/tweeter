@@ -2,11 +2,14 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getUserTwitterClients } from "../services/_getUserTwitterClientService";
 import { multiLike } from "../services/_likeService";
 import { supabaseClient, twitterClient } from "../services/_getClients";
+import { checkAuthentication } from "../services/_checkAuthenticationService";
 
 export default async function LikeTweetEndpoint(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  await checkAuthentication(req, res);
+
   const { ids, tweetId } = req.query;
 
   try {

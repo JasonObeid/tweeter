@@ -3,11 +3,14 @@ import { getUserTwitterClients } from "../services/_getUserTwitterClientService"
 import { multiReplyTweet } from "../services/_replyTweetService";
 import { supabaseClient, twitterClient } from "../services/_getClients";
 import { TwitterAuthUser } from "../../hooks/useTwitterAccounts";
+import { checkAuthentication } from "../services/_checkAuthenticationService";
 
 export default async function ReplyTweetEndpoint(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  await checkAuthentication(req, res);
+
   const { tweetId } = req.query;
 
   if (req.method !== "POST") {

@@ -1,5 +1,10 @@
-export async function get<T>(request: RequestInfo): Promise<T | null> {
-  const response = await fetch(request);
+export async function get<T>(
+  request: RequestInfo,
+  headers?: Record<string, string | undefined>,
+): Promise<T | null> {
+  const response = await fetch(request, {
+    headers: new Headers({ ...headers, "Content-Type": "application/json" }),
+  });
 
   if (!response.ok) {
     throw new Error(await response.text());
@@ -16,12 +21,16 @@ export async function get<T>(request: RequestInfo): Promise<T | null> {
 
 export async function post<T>(
   request: RequestInfo,
-  requestConfig?: RequestInit,
+  headers?: Record<string, string | undefined>,
 ): Promise<T | null> {
-  const response = await fetch(request, { ...requestConfig, method: "POST" });
+  const response = await fetch(request, {
+    method: "POST",
+    headers: new Headers({ ...headers, "Content-Type": "application/json" }),
+  });
 
   if (!response.ok) {
-    throw new Error(await response.text());
+    console.error(await response.text());
+    return null;
   }
 
   try {

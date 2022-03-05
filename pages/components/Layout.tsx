@@ -10,7 +10,7 @@ export interface RouteDetail {
 export function Layout({ children }: { children: React.ReactNode }) {
   const routes: RouteDetail[] = [
     {
-      path: "/home",
+      path: "/",
       label: "Home",
     },
     {
