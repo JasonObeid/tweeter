@@ -22,13 +22,16 @@ export async function replyTweet(
 }
 
 export async function multiReplyTweet(
-  userTwitterClients: TwitterApi[],
+  userTwitterClients: (TwitterApi | null)[],
   tweetId: string,
   users: TwitterAuthUser[],
 ) {
   return await Promise.all(
     userTwitterClients.map(async (userTwitterClient, index) => {
       try {
+        if (userTwitterClient === null) {
+          return false;
+        }
         return await replyTweet(userTwitterClient, tweetId, users[index]);
       } catch (error) {
         console.error(error);

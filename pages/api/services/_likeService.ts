@@ -20,12 +20,15 @@ export async function like(userTwitterClient: TwitterApi, tweetId: string) {
 }
 
 export async function multiLike(
-  userTwitterClients: TwitterApi[],
+  userTwitterClients: (TwitterApi | null)[],
   tweetId: string,
 ) {
   return await Promise.all(
     userTwitterClients.map(async (userTwitterClient) => {
       try {
+        if (userTwitterClient === null) {
+          return false;
+        }
         return await like(userTwitterClient, tweetId);
       } catch (error) {
         console.error(error);

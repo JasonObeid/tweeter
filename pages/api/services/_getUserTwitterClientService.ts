@@ -71,21 +71,35 @@ export async function getRefreshedClients(
   const refreshedUserAuths: RefreshedTwitterAuth[] = [];
   const twitterUserClients = await Promise.all(
     staleUserAuths.map(async (userAuth) => {
-      // if (isExpired(userAuth)) {
-      //   console.log(`refreshing auth for ${userAuth.username} ...`);
-      //   const refreshedUserAuth = await twitterClient.refreshOAuth2Token(
-      //     userAuth.refresh_token,
-      //   );
-      //   console.log(`refreshed auth for ${userAuth.username} ...`);
+      try {
+        if (isExpired(userAuth)) {
+          console.log(`refreshing auth for ${userAuth.username} ...`);
+          const refreshedUserAuth = await twitterClient.refreshOAuth2Token(
+            userAuth.refresh_token,
+          );
+          const isAuthenticated =
+            await refreshedUserAuth.client.currentUserV2();
+          if (isAuthenticated) {
+            console.log(`refreshed auth for ${userAuth.username} ...`);
+          } else {
+            console.error(
+              `failed to refresh auth for ${userAuth.username} ...`,
+            );
+          }
 
-      //   refreshedUserAuths.push({
-      //     ...refreshedUserAuth,
-      //     username: userAuth.username,
-      //   });
-      //   return refreshedUserAuth.client;
-      // }
+          refreshedUserAuths.push({
+            ...refreshedUserAuth,
+            username: userAuth.username,
+            id: userAuth.id,
+          });
+          return refreshedUserAuth.client;
+        }
 
-      return new TwitterApi(userAuth.access_token);
+        return new TwitterApi(userAuth.access_token);
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
     }),
   );
 
@@ -106,13 +120,13 @@ export async function getUserTwitterClients(
     staleUserAuths,
   );
 
-  // if (refreshedUserAuths.length > 0) {
-  //   await Promise.all(
-  //     refreshedUserAuths.map((refreshedUserAuth) =>
-  //       storeRefreshedUserAuth(supabaseClient, refreshedUserAuth),
-  //     ),
-  //   );
-  // }
+  if (refreshedUserAuths.length > 0) {
+    await Promise.all(
+      refreshedUserAuths.map((refreshedUserAuth) =>
+        storeRefreshedUserAuth(supabaseClient, refreshedUserAuth),
+      ),
+    );
+  }
   return twitterUserClients;
 }
 

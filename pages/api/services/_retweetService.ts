@@ -22,13 +22,21 @@ export async function retweet(userTwitterClient: TwitterApi, tweetId: string) {
 }
 
 export async function multiRetweet(
-  userTwitterClients: TwitterApi[],
+  userTwitterClients: (TwitterApi | null)[],
   tweetId: string,
 ) {
   return await Promise.all(
     userTwitterClients.map(async (userTwitterClient) => {
-      console.log(await userTwitterClient.currentUserV2());
-      return await retweet(userTwitterClient, tweetId);
+      try {
+        if (userTwitterClient === null) {
+          return false;
+        }
+        console.log(await userTwitterClient.currentUserV2());
+        return await retweet(userTwitterClient, tweetId);
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
     }),
   );
 }

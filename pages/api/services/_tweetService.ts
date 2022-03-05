@@ -12,12 +12,15 @@ export async function tweet(userTwitterClient: TwitterApi, tweetText: string) {
 }
 
 export async function multiTweet(
-  userTwitterClients: TwitterApi[],
+  userTwitterClients: (TwitterApi | null)[],
   tweetText: string,
 ) {
   return await Promise.all(
     userTwitterClients.map(async (userTwitterClient) => {
       try {
+        if (userTwitterClient === null) {
+          return false;
+        }
         return await tweet(userTwitterClient, tweetText);
       } catch (error) {
         console.error(error);
