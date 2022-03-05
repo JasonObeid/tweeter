@@ -1,11 +1,11 @@
-import { useMessagePresets } from "./hooks/useMessagePresets";
-import { Layout } from "./components/Layout";
-import { MessagePreset } from "./components/MessagePreset";
-import { LoadingSpinner } from "./components/LoadingSpinner";
-import { validIcon, invalidIcon } from "./components/TweetInput";
-import { useState } from "react";
+import { MessagePreset } from "../src/components/MessagePreset";
+import { LoadingSpinner } from "../src/components/LoadingSpinner";
+import { validIcon, invalidIcon } from "../src/components/TweetInput";
+import React, { useState } from "react";
 
-import EnforceAuthenticated from "./components/EnforceAuthenticated";
+import EnforceAuthenticated from "../src/components/EnforceAuthenticated";
+import { useMessagePresets } from "../src/hooks/useMessagePresets";
+import { Layout } from "../src/components/Layout";
 
 export const getServerSideProps = EnforceAuthenticated();
 

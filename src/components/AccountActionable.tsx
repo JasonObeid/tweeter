@@ -1,5 +1,5 @@
 import React from "react";
-import { EngagementType } from "..";
+import { EngagementType } from "../config/types";
 import { TwitterAuthUser } from "../hooks/useTwitterAccounts";
 import { MessagePresetDropdown } from "./MessagePresetDropdown";
 
@@ -22,17 +22,17 @@ export function AccountActionable({
         type="button"
         onClick={() => selectUser(user.id)}
         key={user.id}
-        className={`flex sm:w-56 sm:m-auto mb-6 sm:mb-6 content-center ${
-          isSelected ? "pl-3 border-l-2 border-l-indigo-500" : ""
+        className={`mb-6 flex content-center sm:m-auto sm:mb-6 sm:w-56 ${
+          isSelected ? "border-l-2 border-l-indigo-500 pl-3" : ""
         }`}
       >
-        <h2 className="text-white flex flex-1">{user.username}</h2>
+        <h2 className="flex flex-1 text-white">{user.username}</h2>
         <input
           type="checkbox"
           // disabled={true}
           checked={isSelected}
           value={isSelected.toString()}
-          className="text-white hover:cursor-pointer self-center"
+          className="self-center text-white hover:cursor-pointer"
           onChange={() => {}}
         />
       </button>

@@ -1,6 +1,6 @@
 import { TwitterApi } from "twitter-api-v2";
 import { PostgrestSingleResponse, SupabaseClient } from "@supabase/supabase-js";
-import { TwitterAuthSession, TwitterAuth } from "../../config/types";
+import { TwitterAuthSession, TwitterAuth } from "../../../src/config/types";
 
 export async function getSessionStateAndCodeVerifier(
   supabaseClient: SupabaseClient,

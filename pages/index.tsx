@@ -1,18 +1,17 @@
 import { useState, useEffect } from "react";
+import { AccountSelector } from "../src/components/AccountSelector";
+import { TweetInput } from "../src/components/TweetInput";
+import { Layout } from "../src/components/Layout";
+import EnforceAuthenticated from "../src/components/EnforceAuthenticated";
 import {
-  TwitterAuthUser,
-  useTwitterAccounts,
-} from "./hooks/useTwitterAccounts";
-import { AccountSelector } from "./components/AccountSelector";
-import { TweetInput } from "./components/TweetInput";
-import { Layout } from "./components/Layout";
-import {
-  getPrefilledReplies,
   useMessagePresets,
-} from "./hooks/useMessagePresets";
-import EnforceAuthenticated from "./components/EnforceAuthenticated";
-
-export type EngagementType = "reply" | "retweet" | "like";
+  getPrefilledReplies,
+} from "../src/hooks/useMessagePresets";
+import {
+  useTwitterAccounts,
+  TwitterAuthUser,
+} from "../src/hooks/useTwitterAccounts";
+import { EngagementType } from "../src/config/types";
 
 export const getServerSideProps = EnforceAuthenticated();
 

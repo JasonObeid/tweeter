@@ -18,3 +18,5 @@ export interface TwitterAuth {
   created_at: string;
   session_id: string;
 }
+
+export type EngagementType = "reply" | "retweet" | "like";

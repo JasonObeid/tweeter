@@ -3,7 +3,7 @@ import { TwitterApi } from "twitter-api-v2";
 import {
   GenerateAuthLinkResponse,
   TwitterAuthSession,
-} from "../../config/types";
+} from "../../../src/config/types";
 
 export async function storeAuthSession(
   supabaseClient: SupabaseClient,

@@ -1,11 +1,10 @@
-import { NextApiRequest } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { Layout } from "./components/Layout";
-import { LoadingSpinner } from "./components/LoadingSpinner";
-import { useTwitterLogin } from "./hooks/useTwitterLogin";
+import { Layout } from "../src/components/Layout";
+import { LoadingSpinner } from "../src/components/LoadingSpinner";
 
-import EnforceAuthenticated from "./components/EnforceAuthenticated";
+import EnforceAuthenticated from "../src/components/EnforceAuthenticated";
+import { useTwitterLogin } from "../src/hooks/useTwitterLogin";
 
 export const getServerSideProps = EnforceAuthenticated();
 

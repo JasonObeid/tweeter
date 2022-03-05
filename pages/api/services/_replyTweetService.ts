@@ -1,5 +1,5 @@
 import { TwitterApi } from "twitter-api-v2";
-import { TwitterAuthUser } from "../../hooks/useTwitterAccounts";
+import { TwitterAuthUser } from "../../../src/hooks/useTwitterAccounts";
 
 export async function replyTweet(
   userTwitterClient: TwitterApi,

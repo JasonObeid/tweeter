@@ -4,7 +4,7 @@ import {
   SupabaseClient,
 } from "@supabase/supabase-js";
 import { TOAuth2Scope, TwitterApi } from "twitter-api-v2";
-import { TwitterAuth } from "../../config/types";
+import { TwitterAuth } from "../../../src/config/types";
 
 export interface RefreshedTwitterAuth {
   id: string;

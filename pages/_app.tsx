@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import "../styles/globals.css";
 import LogRocket from "logrocket";
 import React from "react";
-import { AuthContextProvider } from "./context/AuthContext";
+import { AuthContextProvider } from "../src/context/AuthContext";
 
 if (typeof window !== "undefined" && process.env.NODE_ENV === "production") {
   LogRocket.init("ecxlpy/tweeter");

@@ -1,7 +1,7 @@
-import { useTwitterLogin } from "./hooks/useTwitterLogin";
-import { useTwitterAccounts } from "./hooks/useTwitterAccounts";
-import { Layout } from "./components/Layout";
-import EnforceAuthenticated from "./components/EnforceAuthenticated";
+import { Layout } from "../src/components/Layout";
+import EnforceAuthenticated from "../src/components/EnforceAuthenticated";
+import { useTwitterAccounts } from "../src/hooks/useTwitterAccounts";
+import { useTwitterLogin } from "../src/hooks/useTwitterLogin";
 
 export const getServerSideProps = EnforceAuthenticated();
 

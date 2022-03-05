@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { EngagementType } from "..";
+import { Dispatch, SetStateAction } from "react";
+import { EngagementType } from "../config/types";
 import { useCheckTweetId } from "../hooks/useCheckTweetId";
 import { useLikeTweet } from "../hooks/useLikeTweet";
 import { useReplyTweetMutation } from "../hooks/useReplyTweet";
@@ -15,7 +15,7 @@ import { Success } from "./Success";
 export const invalidIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5 text-red-800 self-center"
+    className="h-5 w-5 self-center text-red-800"
     viewBox="0 0 20 20"
     fill="currentColor"
   >
@@ -31,7 +31,7 @@ export const invalidIcon = (
 export const validIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5 text-green-800 self-center"
+    className="h-5 w-5 self-center text-green-800"
     viewBox="0 0 20 20"
     fill="currentColor"
   >
@@ -47,7 +47,7 @@ export const validIcon = (
 export const replyIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5 mr-2"
+    className="mr-2 h-5 w-5"
     viewBox="0 0 20 20"
     fill="currentColor"
   >
@@ -62,7 +62,7 @@ export const replyIcon = (
 export const likeIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5 mr-2"
+    className="mr-2 h-5 w-5"
     viewBox="0 0 20 20"
     fill="currentColor"
   >
@@ -77,7 +77,7 @@ export const likeIcon = (
 export const retweetIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5 mr-2"
+    className="mr-2 h-5 w-5"
     viewBox="0 0 20 20"
     fill="currentColor"
   >
@@ -128,22 +128,22 @@ export function TweetInput({
   const isButtonDisabled = !(selectedUsers.length > 0 && isTweetIdValid);
 
   return (
-    <div className="container px-5 mx-auto text-center">
-      <div className="bg-gray-900 shadow-md rounded-lg p-8 flex flex-col mb-8">
-        <h2 className="text-white text-md md:text-lg mb-1 font-medium ">
+    <div className="container mx-auto px-5 text-center">
+      <div className="mb-8 flex flex-col rounded-lg bg-gray-900 p-8 shadow-md">
+        <h2 className="text-md mb-1 font-medium text-white md:text-lg ">
           Tweet Engagement
         </h2>
-        <p className="leading-relaxed mb-5">
+        <p className="mb-5 leading-relaxed">
           Paste the Tweet ID of the tweet you want to engage with.
         </p>
-        <p className="leading-relaxed mb-5">
+        <p className="mb-5 leading-relaxed">
           For example, given a tweet URL like twitter.com/user/status/
           <strong>123456789</strong>, you would enter <strong>123456789</strong>
         </p>
         <div className="relative mb-4">
           <label
             htmlFor="tweet-url"
-            className="flex justify-center content-center gap-2 leading-7 text-sm md:text-base text-gray-400 mb-2"
+            className="mb-2 flex content-center justify-center gap-2 text-sm leading-7 text-gray-400 md:text-base"
           >
             Tweet ID {checkTweetIdQuery.isLoading ? <LoadingSpinner /> : null}
             {isTweetIdChecked
@@ -162,7 +162,7 @@ export function TweetInput({
             onChange={(event) => {
               setTweetId(event.target.value);
             }}
-            className={`w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${
+            className={`w-full rounded border border-gray-700 bg-gray-800 py-1 px-3 text-base leading-8 text-gray-100 outline-none transition-colors duration-200 ease-in-out focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 ${
               isTweetIdChecked
                 ? isTweetIdValid
                   ? "border-green-700"
@@ -174,7 +174,7 @@ export function TweetInput({
             }`}
           />
         </div>
-        <div className="flex sm:mx-auto flex-wrap sm:flex-nowrap mb-4 mt-2 md:mt-8">
+        <div className="mb-4 mt-2 flex flex-wrap sm:mx-auto sm:flex-nowrap md:mt-8">
           <button
             onClick={() => setEngagementType("retweet")}
             className={
@@ -210,10 +210,10 @@ export function TweetInput({
           </button>
         </div>
         <button
-          className={`capitalize text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none rounded text-md md:text-lg font-medium title ${
+          className={`text-md title rounded border-0 bg-indigo-500 py-2 px-6 font-medium capitalize text-white focus:outline-none md:text-lg ${
             isButtonDisabled
               ? "cursor-not-allowed"
-              : "hover:bg-indigo-600 cursor-pointer"
+              : "cursor-pointer hover:bg-indigo-600"
           }`}
           onClick={engage}
           disabled={isButtonDisabled}
@@ -221,7 +221,7 @@ export function TweetInput({
           {engagementType}
         </button>
         {retweetMutation.isLoading ? (
-          <div className="flex justify-center content-center mt-2">
+          <div className="mt-2 flex content-center justify-center">
             <p className="mr-2">Retweeting...</p> <LoadingSpinner />
           </div>
         ) : (
@@ -236,7 +236,7 @@ export function TweetInput({
           </>
         )}
         {likeMutation.isLoading ? (
-          <div className="flex justify-center content-center mt-2">
+          <div className="mt-2 flex content-center justify-center">
             <p className="mr-2">Liking...</p> <LoadingSpinner />
           </div>
         ) : (
@@ -251,7 +251,7 @@ export function TweetInput({
           </>
         )}
         {replyTweetMutation.isLoading ? (
-          <div className="flex justify-center content-center mt-2">
+          <div className="mt-2 flex content-center justify-center">
             <p className="mr-2">Replying...</p> <LoadingSpinner />
           </div>
         ) : (
@@ -266,14 +266,14 @@ export function TweetInput({
           </>
         )}
 
-        <p className="text-xs md:text-sm text-gray-400 text-opacity-90 mt-3">
+        <p className="mt-3 text-xs text-gray-400 text-opacity-90 md:text-sm">
           {selectedUsers.length > 0
             ? `You are about to ${engagementType} with ${selectedUsers.length} account(s)`
             : "Select at least one account to engage with."}
         </p>
 
         {isTweetIdNotCheckable || isTweetIdValid === false ? (
-          <p className="text-xs md:text-sm text-gray-400 text-opacity-90 mt-3">
+          <p className="mt-3 text-xs text-gray-400 text-opacity-90 md:text-sm">
             Double check the tweet ID, it seems to be invalid.
           </p>
         ) : null}

@@ -1,6 +1,6 @@
 import { PostgrestSingleResponse, SupabaseClient } from "@supabase/supabase-js";
 import { TwitterApi } from "twitter-api-v2";
-import { TwitterAuth } from "../../config/types";
+import { TwitterAuth } from "../../../src/config/types";
 
 export async function deleteTwitterAuth(
   supabaseClient: SupabaseClient,

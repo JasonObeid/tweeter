@@ -1,5 +1,5 @@
 import { SupabaseClient, PostgrestResponse } from "@supabase/supabase-js";
-import { TwitterAuthUser } from "../../hooks/useTwitterAccounts";
+import { TwitterAuthUser } from "../../../src/hooks/useTwitterAccounts";
 
 export async function getTwitterAuths(supabaseClient: SupabaseClient) {
   const { data, error, status }: PostgrestResponse<TwitterAuthUser> =
