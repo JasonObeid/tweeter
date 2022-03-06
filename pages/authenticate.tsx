@@ -1,10 +1,12 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Layout } from "../src/components/Layout";
 import { LoadingSpinner } from "../src/components/LoadingSpinner";
 
 import EnforceAuthenticated from "../src/components/EnforceAuthenticated";
 import { useTwitterLogin } from "../src/hooks/useTwitterLogin";
+import { Success } from "../src/components/Success";
+import { Error } from "../src/components/Error";
 
 export const getServerSideProps = EnforceAuthenticated();
 
@@ -31,9 +33,9 @@ export default function TwitterLogin() {
             Logging into twitter <LoadingSpinner />
           </div>
         ) : twitterLoginMutation.isSuccess ? (
-          "Success"
+          <Success text="Logged in successfully" />
         ) : (
-          "failure"
+          <Error text="Failed to log in" />
         )}
       </div>
     </Layout>

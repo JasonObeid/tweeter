@@ -1,26 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getUserTwitterClients } from "../services/_getUserTwitterClientService";
 import { supabaseClient, twitterClient } from "../services/_getClients";
-import { getTwitterAuths } from "../services/_refreshUserAuthService";
+import { refreshUserAuths } from "../services/_refreshUserAuthService";
 
 export default async function RefreshUserAuthsEndpoint(
   _req: NextApiRequest,
   res: NextApiResponse,
 ) {
   try {
-    const users = await getTwitterAuths(supabaseClient);
-    const userTwitterClients = await getUserTwitterClients(
-      supabaseClient,
-      twitterClient,
-      users.map((user) => user.id),
-    );
-    const response = await Promise.all(
-      userTwitterClients.map(async (client) =>
-        client === null ? null : await client.currentUserV2(),
-      ),
-    );
+    const users = await refreshUserAuths(twitterClient, supabaseClient);
 
-    res.status(200).json(response);
+    res.status(200).json(users);
   } catch (error: unknown) {
     console.error(error);
     res.status(400).json(error);

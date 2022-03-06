@@ -1,11 +1,11 @@
 import { MessagePreset } from "../src/components/MessagePreset";
 import { LoadingSpinner } from "../src/components/LoadingSpinner";
-import { validIcon, invalidIcon } from "../src/components/TweetInput";
 import React, { useState } from "react";
 
 import EnforceAuthenticated from "../src/components/EnforceAuthenticated";
 import { useMessagePresets } from "../src/hooks/useMessagePresets";
 import { Layout } from "../src/components/Layout";
+import { ValidIcon, InvalidIcon } from "../src/components/Icons";
 
 export const getServerSideProps = EnforceAuthenticated();
 
@@ -46,7 +46,7 @@ export default function Presets() {
           <h2 className="text-md title-font mb-8 flex content-center justify-center gap-2 font-medium text-white md:text-lg">
             Message Presets
             {isLoading ? <LoadingSpinner /> : null}
-            {isEdited ? (isSuccess ? validIcon : invalidIcon) : null}
+            {isEdited ? isSuccess ? <ValidIcon /> : <InvalidIcon /> : null}
           </h2>
           {messagePresets.map((messagePreset) => (
             <MessagePreset

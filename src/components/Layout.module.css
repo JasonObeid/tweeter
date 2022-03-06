@@ -1,20 +1,17 @@
-.container-grid {
+.containerGrid {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: min-content minmax(300px, 1fr) min-content;
   gap: 0px 0px;
   grid-template-areas:
     "header"
-    "body"
-    "footer";
+    "body";
 }
 
 .header {
   grid-area: header;
 }
+
 .body {
   grid-area: body;
-}
-.footer {
-  grid-area: footer;
 }

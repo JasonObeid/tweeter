@@ -23,7 +23,6 @@ export default async function ReplyTweetEndpoint(
     const ids = users.map((user) => user.id);
     const userTwitterClients = await getUserTwitterClients(
       supabaseClient,
-      twitterClient,
       Array.isArray(ids) ? ids : [ids],
     );
     const response = await multiReplyTweet(

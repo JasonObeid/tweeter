@@ -15,7 +15,6 @@ export default async function createTweetEndpoint(
   try {
     const userTwitterClients = await getUserTwitterClients(
       supabaseClient,
-      twitterClient,
       Array.isArray(ids) ? ids : [ids],
     );
     const response = await multiTweet(userTwitterClients, text as string);

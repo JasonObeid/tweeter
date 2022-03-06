@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getUserTwitterClients } from "../services/_getUserTwitterClientService";
 import { multiLike } from "../services/_likeService";
-import { supabaseClient, twitterClient } from "../services/_getClients";
+import { supabaseClient } from "../services/_getClients";
 import { checkAuthentication } from "../services/_checkAuthenticationService";
 
 export default async function LikeTweetEndpoint(
@@ -15,7 +15,6 @@ export default async function LikeTweetEndpoint(
   try {
     const userTwitterClients = await getUserTwitterClients(
       supabaseClient,
-      twitterClient,
       Array.isArray(ids) ? ids : [ids],
     );
 
