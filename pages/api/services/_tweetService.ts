@@ -4,7 +4,7 @@ export async function tweet(userTwitterClient: TwitterApi, tweetText: string) {
   const { data, errors } = await userTwitterClient.v2.tweet(tweetText);
 
   if (errors) {
-    throw new Error(errors.map((error) => JSON.stringify(error)).join("\n"));
+    throw new Error(JSON.stringify(errors));
   }
 
   console.log(data);

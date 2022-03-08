@@ -12,6 +12,6 @@ export default async function RefreshUserAuthsEndpoint(
     res.status(200).json(users);
   } catch (error: unknown) {
     console.error(error);
-    res.status(400).json(error);
+    res.status(400).json((error as Error).toString());
   }
 }

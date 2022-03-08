@@ -23,6 +23,6 @@ export default async function TwitterLoginEndpoint(
     res.status(200).json(generatedAuthLinkResponse);
   } catch (error: unknown) {
     console.error(error);
-    res.status(400).json(error);
+    res.status(400).json((error as Error).toString());
   }
 }

@@ -4,9 +4,7 @@ export async function like(userTwitterClient: TwitterApi, tweetId: string) {
   const { data: userObject, errors: userObjectErrors } =
     await userTwitterClient.v2.me();
   if (userObjectErrors) {
-    throw new Error(
-      userObjectErrors.map((error) => JSON.stringify(error)).join("\n"),
-    );
+    throw new Error(JSON.stringify(userObjectErrors));
   }
 
   const { data, errors } = await userTwitterClient.v2.like(
@@ -14,7 +12,7 @@ export async function like(userTwitterClient: TwitterApi, tweetId: string) {
     tweetId,
   );
   if (errors) {
-    throw new Error(errors.map((error) => JSON.stringify(error)).join("\n"));
+    throw new Error(JSON.stringify(errors));
   }
   return data.liked;
 }

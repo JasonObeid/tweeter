@@ -21,6 +21,6 @@ export default async function createTweetEndpoint(
     res.status(200).json(response);
   } catch (error: unknown) {
     console.error(error);
-    res.status(400).json(error);
+    res.status(400).json((error as Error).toString());
   }
 }

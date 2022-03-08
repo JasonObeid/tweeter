@@ -5,9 +5,7 @@ export async function retweet(userTwitterClient: TwitterApi, tweetId: string) {
     await userTwitterClient.v2.me();
 
   if (userObjectErrors) {
-    throw new Error(
-      userObjectErrors.map((error) => JSON.stringify(error)).join("\n"),
-    );
+    throw new Error(JSON.stringify(userObjectErrors));
   }
 
   const { data, errors } = await userTwitterClient.v2.retweet(
@@ -16,7 +14,7 @@ export async function retweet(userTwitterClient: TwitterApi, tweetId: string) {
   );
 
   if (errors) {
-    throw new Error(errors.map((error) => JSON.stringify(error)).join("\n"));
+    throw new Error(JSON.stringify(errors));
   }
   return data.retweeted;
 }

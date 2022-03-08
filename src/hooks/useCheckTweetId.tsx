@@ -28,13 +28,17 @@ export function useCheckTweetId() {
 
   async function checkTweetId() {
     if (debouncedTweetId.length > 0 && isNumeric(debouncedTweetId)) {
-      const checkTweetIdResult = await get<boolean>(
-        `/api/twitter/tweetExists?tweetId=${debouncedTweetId}`,
-        { token: session?.access_token },
-      );
+      const checkTweetIdResult = await get<{
+        id: string;
+        isValid: boolean;
+        text: string;
+      }>(`/api/twitter/tweetExists?tweetId=${debouncedTweetId}`, {
+        token: session?.access_token,
+      });
       return {
-        tweetId: debouncedTweetId,
-        isValid: checkTweetIdResult || false,
+        tweetId: checkTweetIdResult?.id,
+        text: checkTweetIdResult?.text,
+        isValid: checkTweetIdResult?.isValid ?? false,
       };
     }
   }
@@ -45,6 +49,7 @@ export function useCheckTweetId() {
     {
       cacheTime: 5 * 60 * 1000,
       staleTime: 5 * 60 * 1000,
+      retry: 1,
     },
   );
 

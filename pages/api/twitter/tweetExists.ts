@@ -15,9 +15,11 @@ export default async function TweetExistsEndpoint(
 
   try {
     const response = await tweetExists(twitterClient, tweetId as string);
-    res.status(200).json(response);
-  } catch (error: unknown) {
+    res
+      .status(200)
+      .json({ id: response.id, text: response.text, isValid: true });
+  } catch (error) {
     console.error(error);
-    res.status(400).json(error);
+    res.status(400).json((error as Error).toString());
   }
 }

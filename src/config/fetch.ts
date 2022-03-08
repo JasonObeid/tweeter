@@ -7,7 +7,8 @@ export async function get<T>(
   });
 
   if (!response.ok) {
-    throw new Error(await response.text());
+    console.error(await response.text());
+    return null;
   }
 
   try {

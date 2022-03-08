@@ -50,7 +50,7 @@ export function TweetInput({
 
   const isTweetIdChecked = checkTweetIdQuery.data !== undefined;
   const isTweetIdValid =
-    checkTweetIdQuery.data !== undefined && checkTweetIdQuery.data.isValid;
+    checkTweetIdQuery.data !== undefined && checkTweetIdQuery.data?.isValid;
 
   const isButtonDisabled = !(selectedUsers.length > 0 && isTweetIdValid);
 
@@ -103,6 +103,11 @@ export function TweetInput({
             }`}
           />
         </div>
+        {isTweetIdChecked && isTweetIdValid ? (
+          <i className="mb-3 overflow-hidden text-ellipsis whitespace-nowrap">
+            {`"${checkTweetIdQuery.data?.text}"`}
+          </i>
+        ) : null}
         <div className="mb-4 mt-2 flex flex-wrap sm:mx-auto sm:flex-nowrap md:mt-8">
           <button
             onClick={() => setEngagementType("retweet")}
@@ -211,14 +216,22 @@ export function TweetInput({
             ) : null}
           </>
         )}
-        <p className="mt-3 text-xs text-gray-400 text-opacity-90 md:text-sm">
-          {selectedUsers.length > 0
-            ? `You are about to ${engagementType} with ${selectedUsers.length} account(s)`
-            : "Select at least one account to engage with."}
-        </p>
-        {isTweetIdChecked && !isTweetIdValid ? (
+        {selectedUsers.length === 0 ? (
+          <p className="mt-3 text-xs text-gray-400 text-opacity-90 md:text-sm">
+            Select at least one account to engage with.
+          </p>
+        ) : null}
+        {tweetId.length === 0 ? (
+          <p className="mt-3 text-xs text-gray-400 text-opacity-90 md:text-sm">
+            Please enter a tweet ID
+          </p>
+        ) : isTweetIdChecked && !isTweetIdValid ? (
           <p className="mt-3 text-xs text-gray-400 text-opacity-90 md:text-sm">
             Double check the tweet ID, it seems to be invalid.
+          </p>
+        ) : isTweetIdChecked && isTweetIdValid && selectedUsers.length > 0 ? (
+          <p className="mt-3 text-xs text-gray-400 text-opacity-90 md:text-sm">
+            {`You are about to ${engagementType} with ${selectedUsers.length} account(s)`}
           </p>
         ) : null}
       </div>

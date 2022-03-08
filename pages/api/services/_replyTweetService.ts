@@ -14,7 +14,7 @@ export async function replyTweet(
   });
 
   if (errors) {
-    throw new Error(errors.map((error) => JSON.stringify(error)).join("\n"));
+    throw new Error(JSON.stringify(errors));
   }
 
   console.log(data);

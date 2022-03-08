@@ -97,9 +97,7 @@ export async function login(
 
   const { data: userObject, errors: userObjectErrors } = await client.v2.me();
   if (userObjectErrors) {
-    throw new Error(
-      userObjectErrors.map((error) => JSON.stringify(error)).join("\n"),
-    );
+    throw new Error(JSON.stringify(userObjectErrors));
   }
 
   const storedAuthData = await storeAuthLogin(
