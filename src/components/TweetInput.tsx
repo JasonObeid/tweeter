@@ -211,14 +211,12 @@ export function TweetInput({
             ) : null}
           </>
         )}
-
         <p className="mt-3 text-xs text-gray-400 text-opacity-90 md:text-sm">
           {selectedUsers.length > 0
             ? `You are about to ${engagementType} with ${selectedUsers.length} account(s)`
             : "Select at least one account to engage with."}
         </p>
-
-        {isTweetIdNotCheckable || isTweetIdValid === false ? (
+        {isTweetIdChecked && !isTweetIdValid ? (
           <p className="mt-3 text-xs text-gray-400 text-opacity-90 md:text-sm">
             Double check the tweet ID, it seems to be invalid.
           </p>
