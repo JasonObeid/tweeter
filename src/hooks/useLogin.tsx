@@ -49,7 +49,11 @@ export function useLogin() {
   const [successText, setSuccessText] = useState<null | string>(null);
 
   const router = useRouter();
-  const from = (router.query["from"] as string) ?? "/";
+  const from =
+    router.query["from"] !== undefined &&
+    !(router.query["from"] as string).includes("_next/data")
+      ? (router.query["from"] as string)
+      : "/";
 
   useEffect(() => {
     const { data: authListener } = client.auth.onAuthStateChange(

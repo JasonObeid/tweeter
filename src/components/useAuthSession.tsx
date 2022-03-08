@@ -7,7 +7,11 @@ export function useAuthSession() {
   console.log(client);
   const router = useRouter();
 
-  const from = (router.query["from"] as string) ?? "/";
+  const from =
+    router.query["from"] !== undefined &&
+    !(router.query["from"] as string).includes("_next/data")
+      ? (router.query["from"] as string)
+      : "/";
 
   const [session, setSession] = useState<Session | null>(null);
   console.log(session);

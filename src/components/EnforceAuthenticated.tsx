@@ -9,7 +9,10 @@ const EnforceAuthenticated: (
     const { user } = await client.auth.api.getUserByCookie(req);
 
     if (user === null) {
-      const redirectURI = req.url !== "/" ? `/login?from=${req.url}` : "/login";
+      const redirectURI =
+        req.url !== "/" && !req.url?.includes("_next/data")
+          ? `/login?from=${req.url}`
+          : "/login";
       return {
         props: {},
         redirect: { destination: redirectURI },
