@@ -40,13 +40,15 @@ export async function storeRefreshedUserAuth(
         access_token: refreshedTwitterAuth.accessToken,
         refresh_token: refreshedTwitterAuth.refreshToken,
         expires_in: refreshedTwitterAuth.expiresIn,
+        created_at: new Date().toISOString(),
       })
       .eq("id", refreshedTwitterAuth.id)
       .single();
 
   if (error) {
     throw new Error(error.message);
-  } else if (data === null) {
+  }
+  if (data === null) {
     throw new Error("Returned data was null");
   }
 
@@ -112,5 +114,10 @@ export async function refreshUserAuths(
     }),
   );
 
-  return refreshedUserAuths;
+  const storedRefreshUserAuths = await Promise.all(
+    refreshedUserAuths.map(async (refreshedUserAuth) => {
+      return await storeRefreshedUserAuth(supabaseClient, refreshedUserAuth);
+    }),
+  );
+  return storedRefreshUserAuths;
 }
