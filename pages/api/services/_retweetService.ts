@@ -17,6 +17,12 @@ export async function retweet(userTwitterClient: TwitterApi, tweetId: string) {
   if (errors) {
     throw new Error(JSON.stringify(errors));
   }
+
+  logger.info({
+    user: userObject.username,
+    tweetId: tweetId,
+    outcome: data.retweeted,
+  });
   return data.retweeted;
 }
 

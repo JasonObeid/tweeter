@@ -6,6 +6,13 @@ export async function replyTweet(
   tweetId: string,
   replyText: string,
 ) {
+  const { data: userObject, errors: userObjectErrors } =
+    await userTwitterClient.v2.me();
+
+  if (userObjectErrors) {
+    throw new Error(JSON.stringify(userObjectErrors));
+  }
+
   const { data, errors } = await userTwitterClient.v2.tweet({
     reply: {
       in_reply_to_tweet_id: tweetId,
@@ -17,7 +24,12 @@ export async function replyTweet(
     throw new Error(JSON.stringify(errors));
   }
 
-  logger.info(data);
+  logger.info({
+    user: userObject.username,
+    tweetId: tweetId,
+    replyText: replyText,
+    outcome: true,
+  });
   return true;
 }
 
