@@ -16,7 +16,7 @@ export async function updateMessageQueueItem(
   updatedMessage: MessageQueue,
   isSuccess: boolean,
 ) {
-  const now = new Date();
+  const now = new Date().toISOString();
   const { data, error }: PostgrestSingleResponse<MessageQueue> =
     await supabaseClient
       .from("message_queue")
@@ -38,14 +38,14 @@ export async function updateMessageQueueItem(
 }
 
 export async function getMessagesFromQueue(supabaseClient: SupabaseClient) {
-  const now = new Date();
+  const now = new Date().toISOString();
   const { data, error }: PostgrestResponse<MessageQueue> = await supabaseClient
     .from("message_queue")
     .select(
       "id,created_at,updated_at,completed_at,queued_for,sender_auth_id,target_tweet_id,action_type,reply_text,retry_counter,is_success",
     )
     .lte("queued_for", now)
-    .neq("is_success", true)
+    .not("is_success", "is", true)
     .lte("retry_counter", 3);
 
   if (error) {
@@ -139,16 +139,19 @@ export async function engagementQueueService(supabaseClient: SupabaseClient) {
             } catch (error) {
               results[message.id] = JSON.stringify(error);
             }
+          } else {
+            logger.error("unexpectedly missing reply text");
           }
-          logger.error("unexpectedly missing reply text");
 
         default:
           logger.error("received an invalid action_type");
       }
-
+    } else {
       logger.error("unexpectedly missing a twitter client");
     }
   });
+
+  console.log(results);
 
   return results;
 }

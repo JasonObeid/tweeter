@@ -13,7 +13,7 @@ export function createMessageQueueData(
   sendAfter.setMinutes(sendAfter.getMinutes() + randomDelay);
   const messageQueueData: MessageQueueConstructor[] = selectedUsers.map(
     (user) => {
-      const randomDelay = Math.floor(Math.random() * 5);
+      const randomDelay = Math.floor(Math.random() * 5) + 1;
       sendAfter.setMinutes(sendAfter.getMinutes() + randomDelay);
 
       return {
