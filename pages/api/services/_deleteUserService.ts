@@ -24,7 +24,6 @@ export async function deleteUser(
 ) {
   const deletedAuth = await deleteTwitterAuth(supabaseClient, id);
   await twitterClient.revokeOAuth2Token(deletedAuth.access_token);
-  // await client.revokeOAuth2Token(data.refresh_token, "refresh_token");
 
   return deletedAuth;
 }

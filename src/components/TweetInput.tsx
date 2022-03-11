@@ -166,11 +166,7 @@ export function TweetInput({
 
             {retweetMutation.isSuccess ? (
               <Success
-                text={`Retweeted with ${
-                  retweetMutation.data?.filter(
-                    (isSuccess) => isSuccess === true,
-                  ).length
-                } / ${retweetMutation.data?.length} accounts`}
+                text={`Queued ${likeMutation.data?.length} accounts to retweet this tweet`}
               />
             ) : null}
           </>
@@ -187,10 +183,7 @@ export function TweetInput({
 
             {likeMutation.isSuccess ? (
               <Success
-                text={`Liked with ${
-                  likeMutation.data?.filter((isSuccess) => isSuccess === true)
-                    .length
-                } / ${likeMutation.data?.length} accounts`}
+                text={`Queued ${likeMutation.data?.length} accounts to like this tweet`}
               />
             ) : null}
           </>
@@ -207,11 +200,7 @@ export function TweetInput({
 
             {replyTweetMutation.isSuccess ? (
               <Success
-                text={`Replied with ${
-                  replyTweetMutation.data?.filter(
-                    (isSuccess) => isSuccess === true,
-                  ).length
-                } / ${replyTweetMutation.data?.length} accounts`}
+                text={`Queued ${likeMutation.data?.length} accounts to reply to this tweet`}
               />
             ) : null}
           </>

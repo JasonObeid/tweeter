@@ -20,3 +20,25 @@ export interface TwitterAuth {
 }
 
 export type EngagementType = "reply" | "retweet" | "like";
+
+export interface MessageQueue {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  completed_at: string;
+  queued_for: string;
+  sender_auth_id: string;
+  target_tweet_id: string;
+  action_type: EngagementType;
+  reply_text?: string;
+  retry_counter: number;
+  is_success?: boolean;
+}
+
+export interface MessageQueueConstructor {
+  queued_for?: string;
+  sender_auth_id: string;
+  target_tweet_id: string;
+  action_type: EngagementType;
+  reply_text?: string;
+}

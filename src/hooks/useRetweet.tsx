@@ -1,6 +1,9 @@
 import { useMutation } from "react-query";
-import { get } from "../config/fetch";
-import { useAuthContext } from "../context/AuthContext";
+import {
+  createMessageQueueData,
+  storeMessageQueueData,
+} from "../config/queueHelpers";
+import { MessageQueueConstructor } from "../config/types";
 import { TwitterAuthUser } from "./useTwitterAccounts";
 
 export interface RetweetProps {
@@ -9,19 +12,18 @@ export interface RetweetProps {
 }
 
 export function useRetweet() {
-  const { session } = useAuthContext();
-
   async function retweet({ tweetId, selectedUsers }: RetweetProps) {
     if (tweetId.length > 0 && selectedUsers.length > 0) {
-      const usersParam = selectedUsers
-        .map((user) => `ids=${user.id}`)
-        .join("&");
-      const retweetResult = await get<boolean[]>(
-        `/api/twitter/retweet?tweetId=${tweetId}&${usersParam}`,
-        { token: session?.access_token },
+      const queueData: MessageQueueConstructor[] = createMessageQueueData(
+        selectedUsers,
+        tweetId,
+        "retweet",
       );
-      return retweetResult;
+      const insertedQueueData = storeMessageQueueData(queueData);
+
+      return insertedQueueData;
     }
+
     return null;
   }
   const retweetMutation = useMutation(retweet, {

@@ -1,7 +1,7 @@
 import { PostgrestError, Session, User } from "@supabase/supabase-js";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { client } from "../config/supabaseClient";
 
 export interface LoginProps {

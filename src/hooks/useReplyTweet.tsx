@@ -1,6 +1,9 @@
 import { useMutation } from "react-query";
-import { post } from "../config/fetch";
-import { useAuthContext } from "../context/AuthContext";
+import {
+  createMessageQueueData,
+  storeMessageQueueData,
+} from "../config/queueHelpers";
+import { MessageQueueConstructor } from "../config/types";
 import { TwitterAuthUser } from "./useTwitterAccounts";
 
 export interface ReplyTweetProps {
@@ -9,19 +12,18 @@ export interface ReplyTweetProps {
 }
 
 export function useReplyTweetMutation() {
-  const { session } = useAuthContext();
-
   async function replyTweet({ tweetId, selectedUsers }: ReplyTweetProps) {
     if (tweetId.length > 0 && selectedUsers.length > 0) {
-      const retweetResult = await post<boolean[]>(
-        `/api/twitter/reply?tweetId=${tweetId}`,
-        {
-          token: session?.access_token,
-          body: JSON.stringify(selectedUsers),
-        },
+      const queueData: MessageQueueConstructor[] = createMessageQueueData(
+        selectedUsers,
+        tweetId,
+        "reply",
       );
-      return retweetResult;
+      const insertedQueueData = storeMessageQueueData(queueData);
+
+      return insertedQueueData;
     }
+
     return null;
   }
 
