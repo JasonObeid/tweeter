@@ -1,6 +1,7 @@
 import { TwitterApi } from "twitter-api-v2";
 import { PostgrestSingleResponse, SupabaseClient } from "@supabase/supabase-js";
 import { TwitterAuthSession, TwitterAuth } from "../../../src/config/types";
+import { logger } from "../_logger";
 
 export async function getSessionStateAndCodeVerifier(
   supabaseClient: SupabaseClient,
@@ -74,7 +75,7 @@ export async function login(
     supabaseClient,
     sessionId,
   );
-  console.log(authSession);
+  logger.info(authSession);
 
   if (
     !code ||
@@ -108,6 +109,6 @@ export async function login(
     expiresIn,
     sessionId,
   );
-  console.log(storedAuthData);
+  logger.info(storedAuthData);
   return storedAuthData;
 }

@@ -1,30 +1,30 @@
 import { TwitterApi } from "twitter-api-v2";
-import { TwitterAuthUser } from "../../../src/hooks/useTwitterAccounts";
+import { logger } from "../_logger";
 
 export async function replyTweet(
   userTwitterClient: TwitterApi,
   tweetId: string,
-  user: TwitterAuthUser,
+  replyText: string,
 ) {
   const { data, errors } = await userTwitterClient.v2.tweet({
     reply: {
       in_reply_to_tweet_id: tweetId,
     },
-    text: user.reply_text,
+    text: replyText,
   });
 
   if (errors) {
     throw new Error(JSON.stringify(errors));
   }
 
-  console.log(data);
+  logger.info(data);
   return true;
 }
 
 export async function multiReplyTweet(
   userTwitterClients: (TwitterApi | null)[],
   tweetId: string,
-  users: TwitterAuthUser[],
+  replyTexts: string[],
 ) {
   return await Promise.all(
     userTwitterClients.map(async (userTwitterClient, index) => {
@@ -32,9 +32,9 @@ export async function multiReplyTweet(
         if (userTwitterClient === null) {
           return false;
         }
-        return await replyTweet(userTwitterClient, tweetId, users[index]);
+        return await replyTweet(userTwitterClient, tweetId, replyTexts[index]);
       } catch (error) {
-        console.error(error);
+        logger.error(error);
         return false;
       }
     }),

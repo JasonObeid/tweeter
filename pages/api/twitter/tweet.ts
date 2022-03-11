@@ -1,8 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getUserTwitterClients } from "../services/_getUserTwitterClientService";
 import { multiTweet } from "../services/_tweetService";
-import { supabaseClient, twitterClient } from "../services/_getClients";
+import { supabaseClient } from "../services/_getClients";
 import { checkAuthentication } from "../services/_checkAuthenticationService";
+import { logger } from "../_logger";
 
 export default async function createTweetEndpoint(
   req: NextApiRequest,
@@ -20,7 +21,7 @@ export default async function createTweetEndpoint(
     const response = await multiTweet(userTwitterClients, text as string);
     res.status(200).json(response);
   } catch (error: unknown) {
-    console.error(error);
+    logger.error(error);
     res.status(400).json((error as Error).toString());
   }
 }

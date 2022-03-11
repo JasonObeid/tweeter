@@ -29,3 +29,18 @@ export async function getUserTwitterClients(
   );
   return twitterUserClients;
 }
+
+export async function getUserTwitterClientsMap(
+  supabaseClient: SupabaseClient,
+  ids: string[],
+) {
+  const userAuths = await getUserAuths(supabaseClient, ids);
+  const twitterUserClientsMap = new Map<string, TwitterApi>();
+  userAuths.forEach((userAuth) =>
+    twitterUserClientsMap.set(
+      userAuth.id,
+      new TwitterApi(userAuth.access_token),
+    ),
+  );
+  return twitterUserClientsMap;
+}

@@ -1,4 +1,5 @@
 import { TwitterApi } from "twitter-api-v2";
+import { logger } from "../_logger";
 
 export async function retweet(userTwitterClient: TwitterApi, tweetId: string) {
   const { data: userObject, errors: userObjectErrors } =
@@ -29,10 +30,10 @@ export async function multiRetweet(
         if (userTwitterClient === null) {
           return false;
         }
-        console.log(await userTwitterClient.currentUserV2());
+        logger.info(await userTwitterClient.currentUserV2());
         return await retweet(userTwitterClient, tweetId);
       } catch (error) {
-        console.error(error);
+        logger.error(error);
         return false;
       }
     }),

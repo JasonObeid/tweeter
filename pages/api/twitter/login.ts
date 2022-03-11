@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { login } from "../services/_loginService";
 import { supabaseClient, twitterClient } from "../services/_getClients";
 import { checkAuthentication } from "../services/_checkAuthenticationService";
+import { logger } from "../_logger";
 
 export default async function TwitterLoginEndpoint(
   req: NextApiRequest,
@@ -22,7 +23,7 @@ export default async function TwitterLoginEndpoint(
     );
     res.status(200).json(generatedAuthLinkResponse);
   } catch (error: unknown) {
-    console.error(error);
+    logger.error(error);
     res.status(400).json((error as Error).toString());
   }
 }

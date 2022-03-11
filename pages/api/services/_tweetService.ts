@@ -1,4 +1,5 @@
 import { TwitterApi } from "twitter-api-v2";
+import { logger } from "../_logger";
 
 export async function tweet(userTwitterClient: TwitterApi, tweetText: string) {
   const { data, errors } = await userTwitterClient.v2.tweet(tweetText);
@@ -7,7 +8,7 @@ export async function tweet(userTwitterClient: TwitterApi, tweetText: string) {
     throw new Error(JSON.stringify(errors));
   }
 
-  console.log(data);
+  logger.info(data);
   return true;
 }
 
@@ -23,7 +24,7 @@ export async function multiTweet(
         }
         return await tweet(userTwitterClient, tweetText);
       } catch (error) {
-        console.error(error);
+        logger.error(error);
         return false;
       }
     }),

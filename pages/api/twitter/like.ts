@@ -3,6 +3,7 @@ import { getUserTwitterClients } from "../services/_getUserTwitterClientService"
 import { multiLike } from "../services/_likeService";
 import { supabaseClient } from "../services/_getClients";
 import { checkAuthentication } from "../services/_checkAuthenticationService";
+import { logger } from "../_logger";
 
 export default async function LikeTweetEndpoint(
   req: NextApiRequest,
@@ -21,7 +22,7 @@ export default async function LikeTweetEndpoint(
     const response = await multiLike(userTwitterClients, tweetId as string);
     res.status(200).json(response);
   } catch (error: unknown) {
-    console.error(error);
+    logger.error(error);
     res.status(400).json((error as Error).toString());
   }
 }

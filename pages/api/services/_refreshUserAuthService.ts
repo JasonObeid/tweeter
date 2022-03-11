@@ -5,6 +5,7 @@ import {
 } from "@supabase/supabase-js";
 import { TOAuth2Scope, TwitterApi } from "twitter-api-v2";
 import { TwitterAuth } from "../../../src/config/types";
+import { logger } from "../_logger";
 
 export interface RefreshedTwitterAuth {
   id: string;
@@ -52,7 +53,7 @@ export async function storeRefreshedUserAuth(
     throw new Error("Returned data was null");
   }
 
-  console.log(`stored refreshed auth for ${refreshedTwitterAuth.username} ...`);
+  logger.info(`stored refreshed auth for ${refreshedTwitterAuth.username} ...`);
   return data;
 }
 
@@ -62,18 +63,18 @@ export function shouldRefresh(userAuth: TwitterAuth) {
   const expiresAt = new Date(userAuth.created_at);
   expiresAt.setSeconds(expiresAt.getSeconds() + userAuth.expires_in);
   if (now > expiresAt) {
-    console.error(`Auth for ${userAuth.username} is already expired`);
+    logger.error(`Auth for ${userAuth.username} is already expired`);
     return false;
   }
 
   const refreshAfter = new Date(userAuth.created_at);
   refreshAfter.setSeconds(refreshAfter.getSeconds() + userAuth.expires_in / 3);
   if (now > refreshAfter) {
-    console.log(`Should refresh auth for ${userAuth.username}`);
+    logger.info(`Should refresh auth for ${userAuth.username}`);
     return true;
   }
 
-  console.log(`Not refreshing auth for ${userAuth.username}`);
+  logger.info(`Not refreshing auth for ${userAuth.username}`);
   return false;
 }
 
@@ -87,29 +88,27 @@ export async function refreshUserAuths(
     staleUserAuths.map(async (userAuth) => {
       try {
         if (shouldRefresh(userAuth)) {
-          console.log(`refreshing auth for ${userAuth.username} ...`);
-          console.log(`refreshing auth for ${JSON.stringify(userAuth)} ...`);
+          logger.info(`refreshing auth for ${userAuth.username} ...`);
+          logger.info(`refreshing auth for ${JSON.stringify(userAuth)} ...`);
           const refreshedUserAuth = await twitterClient.refreshOAuth2Token(
             userAuth.refresh_token,
           );
           const isAuthenticated =
             await refreshedUserAuth.client.currentUserV2();
           if (isAuthenticated) {
-            console.log(`refreshed auth for ${userAuth.username} ...`);
+            logger.info(`refreshed auth for ${userAuth.username} ...`);
             refreshedUserAuths.push({
               ...refreshedUserAuth,
               username: userAuth.username,
               id: userAuth.id,
             });
           } else {
-            console.error(
-              `failed to refresh auth for ${userAuth.username} ...`,
-            );
+            logger.error(`failed to refresh auth for ${userAuth.username} ...`);
           }
         }
       } catch (error) {
-        console.error(`failed to refresh auth for ${userAuth.username} ...`);
-        console.error(error);
+        logger.error(`failed to refresh auth for ${userAuth.username} ...`);
+        logger.error(error);
       }
     }),
   );

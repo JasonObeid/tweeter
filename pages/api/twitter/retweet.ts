@@ -3,6 +3,7 @@ import { getUserTwitterClients } from "../services/_getUserTwitterClientService"
 import { multiRetweet } from "../services/_retweetService";
 import { supabaseClient } from "../services/_getClients";
 import { checkAuthentication } from "../services/_checkAuthenticationService";
+import { logger } from "../_logger";
 
 export default async function RetweetEndpoint(
   req: NextApiRequest,
@@ -20,7 +21,7 @@ export default async function RetweetEndpoint(
     const response = await multiRetweet(userTwitterClients, tweetId as string);
     res.status(200).json(response);
   } catch (error: unknown) {
-    console.error(error);
+    logger.error(error);
     res.status(400).json((error as Error).toString());
   }
 }

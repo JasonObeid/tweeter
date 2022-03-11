@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { checkAuthentication } from "../services/_checkAuthenticationService";
 import { deleteUser } from "../services/_deleteUserService";
 import { supabaseClient, twitterClient } from "../services/_getClients";
+import { logger } from "../_logger";
 
 export default async function DeleteUserEndpoint(
   req: NextApiRequest,
@@ -19,7 +20,7 @@ export default async function DeleteUserEndpoint(
     );
     res.status(200).json(deletedUser);
   } catch (error: unknown) {
-    console.error(error);
+    logger.error(error);
     res.status(400).json((error as Error).toString());
   }
 }

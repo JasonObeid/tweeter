@@ -1,4 +1,5 @@
 import { TwitterApi } from "twitter-api-v2";
+import { logger } from "../_logger";
 
 export async function like(userTwitterClient: TwitterApi, tweetId: string) {
   const { data: userObject, errors: userObjectErrors } =
@@ -29,7 +30,7 @@ export async function multiLike(
         }
         return await like(userTwitterClient, tweetId);
       } catch (error) {
-        console.error(error);
+        logger.error(error);
         return false;
       }
     }),

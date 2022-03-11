@@ -1,9 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getUserTwitterClients } from "../services/_getUserTwitterClientService";
 import { multiReplyTweet } from "../services/_replyTweetService";
-import { supabaseClient, twitterClient } from "../services/_getClients";
+import { supabaseClient } from "../services/_getClients";
 import { checkAuthentication } from "../services/_checkAuthenticationService";
 import { TwitterAuthUser } from "../../../src/hooks/useTwitterAccounts";
+import { logger } from "../_logger";
 
 export default async function ReplyTweetEndpoint(
   req: NextApiRequest,
@@ -28,11 +29,11 @@ export default async function ReplyTweetEndpoint(
     const response = await multiReplyTweet(
       userTwitterClients,
       tweetId as string,
-      users,
+      users.map((user) => user.reply_text),
     );
     res.status(200).json(response);
   } catch (error: unknown) {
-    console.error(error);
+    logger.error(error);
     res.status(400).json((error as Error).toString());
   }
 }
