@@ -58,24 +58,26 @@ export async function storeRefreshedUserAuth(
 }
 
 export function shouldRefresh(userAuth: TwitterAuth) {
-  const now = new Date();
+  // const now = new Date();
 
-  const expiresAt = new Date(userAuth.created_at);
-  expiresAt.setSeconds(expiresAt.getSeconds() + userAuth.expires_in);
-  if (now > expiresAt) {
-    logger.error(`Auth for ${userAuth.username} is already expired`);
-    return false;
-  }
+  // const expiresAt = new Date(userAuth.created_at);
+  // expiresAt.setSeconds(expiresAt.getSeconds() + userAuth.expires_in);
+  // if (now > expiresAt) {
+  //   logger.error(`Auth for ${userAuth.username} is already expired`);
+  //   return false;
+  // }
 
-  const refreshAfter = new Date(userAuth.created_at);
-  refreshAfter.setSeconds(refreshAfter.getSeconds() + userAuth.expires_in / 3);
-  if (now > refreshAfter) {
-    logger.info(`Should refresh auth for ${userAuth.username}`);
-    return true;
-  }
+  // const refreshAfter = new Date(userAuth.created_at);
+  // refreshAfter.setSeconds(refreshAfter.getSeconds() + userAuth.expires_in / 3);
+  // if (now > refreshAfter) {
+  //   logger.info(`Should refresh auth for ${userAuth.username}`);
+  //   return true;
+  // }
 
-  logger.info(`Not refreshing auth for ${userAuth.username}`);
-  return false;
+  // logger.info(`Not refreshing auth for ${userAuth.username}`);
+  // return false;
+
+  return true;
 }
 
 export async function refreshUserAuths(
