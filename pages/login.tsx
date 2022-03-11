@@ -1,3 +1,5 @@
+import React from "react";
+import { LoadingSpinner } from "../src/components/LoadingSpinner";
 import { useLogin } from "../src/hooks/useLogin";
 
 export default function Login() {
@@ -16,8 +18,9 @@ export default function Login() {
     <section className="body-font bg-gray-900 text-gray-400">
       <div className="container mx-auto flex flex-wrap items-center px-5 py-24">
         <div className="m-auto mt-10 flex w-full flex-col rounded-lg bg-gray-800 bg-opacity-50 p-8 md:mt-0 md:w-1/2 lg:w-2/6">
-          <h2 className="text-md title-font mb-5 font-medium text-white md:text-lg">
-            Sign In
+          <h2 className="text-md title-font mb-5 flex content-center justify-center font-medium text-white md:text-lg">
+            <div>Sign In</div>
+            <LoadingSpinner />
           </h2>
           <div className="relative mb-4">
             <label
@@ -51,6 +54,7 @@ export default function Login() {
           </div>
           <button
             className="text-md rounded border-0 bg-indigo-500 py-2 px-8 text-white hover:bg-indigo-600 focus:outline-none md:text-lg"
+            disabled={loginMutation.isLoading}
             onClick={() => loginMutation.mutate({ email, password })}
           >
             Sign in
@@ -59,15 +63,14 @@ export default function Login() {
             Forgot your password?{" "}
             <button
               onClick={() => resetPasswordMutation.mutate(email)}
+              disabled={resetPasswordMutation.isLoading}
               className="hover:underline"
             >
               Reset password
             </button>
           </p>
           {errorText !== null ? (
-            <p className="file: mt-3  text-xs text-red-700 md:text-sm">
-              {errorText}
-            </p>
+            <p className="mt-3  text-xs text-red-700 md:text-sm">{errorText}</p>
           ) : null}
           {successText !== null ? (
             <p className="mt-3 text-xs  text-white md:text-sm">{successText}</p>
