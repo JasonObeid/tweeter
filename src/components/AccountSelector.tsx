@@ -20,7 +20,7 @@ export function AccountSelector({
 }) {
   return (
     <div className="container mx-auto px-5 text-center">
-      <div className="flex flex-col rounded-lg bg-gray-900 p-8 shadow-md">
+      <form className="flex flex-col rounded-lg bg-gray-900 p-8 shadow-md">
         <h2 className="text-md mb-8 flex content-center justify-center gap-4 font-medium text-white md:text-lg">
           Twitter Accounts - {selectedUsers.length} of {users.length} selected{" "}
           {isLoading ? <LoadingSpinner /> : null}
@@ -37,7 +37,7 @@ export function AccountSelector({
             />
           );
         })}
-      </div>
+      </form>
     </div>
   );
 }
