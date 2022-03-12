@@ -40,7 +40,7 @@ export function MessagePresetDropdown({
           {messagePresets.map((messagePreset) => (
             <button
               key={`dropdown-option-${messagePreset.id}`}
-              className={`flex w-full flex-1 px-4 py-3 text-sm capitalize text-gray-600 transition-colors duration-200 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white ${
+              className={`flex w-full flex-1 px-4 py-3 text-sm text-gray-600 transition-colors duration-200 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white ${
                 messagePreset.message === user.reply_text
                   ? "ml-2 border-l-2 border-l-indigo-500 pl-3"
                   : ""
