@@ -11,7 +11,7 @@ export default async function RunEngagementQueue(
     const result = await engagementQueueService(supabaseClient);
     logger.info(result);
 
-    res.status(200).json("completed");
+    res.status(200).json(result);
   } catch (error: unknown) {
     logger.error(error);
     res.status(400).json((error as Error).toString());

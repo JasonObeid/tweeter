@@ -13,7 +13,7 @@ export async function replyTweet(
     throw new Error(JSON.stringify(userObjectErrors));
   }
 
-  const { data, errors } = await userTwitterClient.v2.tweet({
+  const { errors } = await userTwitterClient.v2.tweet({
     reply: {
       in_reply_to_tweet_id: tweetId,
     },

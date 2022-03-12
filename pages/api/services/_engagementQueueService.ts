@@ -58,6 +58,8 @@ export async function getMessagesFromQueue(supabaseClient: SupabaseClient) {
 
 export async function engagementQueueService(supabaseClient: SupabaseClient) {
   const messages = await getMessagesFromQueue(supabaseClient);
+  logger.info(messages);
+
   const userIdMessages = new Map<string, MessageQueue[]>();
   messages.forEach((message) => {
     const key = message.sender_auth_id;
@@ -70,6 +72,8 @@ export async function engagementQueueService(supabaseClient: SupabaseClient) {
       userIdMessages.set(key, [message]);
     }
   });
+  logger.info(userIdMessages);
+
   const clients = await getUserTwitterClientsMap(
     supabaseClient,
     Array.from(userIdMessages.keys()),
@@ -77,14 +81,14 @@ export async function engagementQueueService(supabaseClient: SupabaseClient) {
 
   const results: Record<string, string> = {};
 
-  messages.forEach(async (message) => {
-    if (clients.has(message.sender_auth_id)) {
-      const userTwitterClient = clients.get(
-        message.sender_auth_id,
-      ) as TwitterApi;
+  await Promise.all(
+    messages.map(async (message) => {
+      if (clients.has(message.sender_auth_id)) {
+        const userTwitterClient = clients.get(
+          message.sender_auth_id,
+        ) as TwitterApi;
 
-      switch (message.action_type) {
-        case "like":
+        if (message.action_type === "like") {
           try {
             const isLikeSuccess = await like(
               userTwitterClient,
@@ -100,9 +104,9 @@ export async function engagementQueueService(supabaseClient: SupabaseClient) {
             ).toString();
           } catch (error) {
             results[message.id] = JSON.stringify(error);
+            await updateMessageQueueItem(supabaseClient, message, false);
           }
-
-        case "retweet":
+        } else if (message.action_type === "retweet") {
           try {
             const isRetweetSuccess = await retweet(
               userTwitterClient,
@@ -118,10 +122,10 @@ export async function engagementQueueService(supabaseClient: SupabaseClient) {
             ).toString();
           } catch (error) {
             results[message.id] = JSON.stringify(error);
+            await updateMessageQueueItem(supabaseClient, message, false);
           }
-
-        case "reply":
-          if (message.reply_text) {
+        } else if (message.action_type === "reply") {
+          if (message.reply_text !== undefined) {
             try {
               const isReplySuccess = await replyTweet(
                 userTwitterClient,
@@ -138,20 +142,18 @@ export async function engagementQueueService(supabaseClient: SupabaseClient) {
               ).toString();
             } catch (error) {
               results[message.id] = JSON.stringify(error);
+              await updateMessageQueueItem(supabaseClient, message, false);
             }
           } else {
             logger.error("unexpectedly missing reply text");
           }
-
-        default:
-          logger.error("received an invalid action_type");
+        }
+      } else {
+        logger.error("unexpectedly missing a twitter client");
       }
-    } else {
-      logger.error("unexpectedly missing a twitter client");
-    }
-  });
+    }),
+  );
 
   console.log(results);
-
   return results;
 }
