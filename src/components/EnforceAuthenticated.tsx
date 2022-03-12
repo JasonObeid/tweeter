@@ -9,25 +9,45 @@ const EnforceAuthenticated: (
     const { user } = await client.auth.api.getUserByCookie(req);
 
     if (user === null) {
-      const redirectURI =
-        req.url !== "/" && !req.url?.includes("_next/data")
-          ? `/login?from=${req.url}`
-          : "/login";
+      const destination = req.url?.includes("/login")
+        ? undefined
+        : !req.url?.includes("_next/data")
+        ? `/login?from=${req.url}`
+        : "/login";
+
+      if (destination !== undefined) {
+        return {
+          props: {},
+          redirect: { destination },
+        };
+      }
+
       return {
         props: {},
-        redirect: { destination: redirectURI },
+      };
+    } else {
+      const destination =
+        !req.url?.includes("_next/data") && req.url === "/login"
+          ? "/"
+          : undefined;
+      if (inner) {
+        return inner(context);
+      }
+      if (destination !== undefined) {
+        return {
+          props: {
+            user,
+          },
+          redirect: { destination },
+        };
+      }
+
+      return {
+        props: {
+          user,
+        },
       };
     }
-
-    if (inner) {
-      return inner(context);
-    }
-
-    return {
-      props: {
-        user,
-      },
-    };
   };
 };
 
