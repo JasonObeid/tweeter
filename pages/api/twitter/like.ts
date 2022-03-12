@@ -9,11 +9,18 @@ export default async function LikeTweetEndpoint(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  await checkAuthentication(req, res);
-
   const { ids, tweetId } = req.query;
 
+  if (ids === undefined) {
+    res.status(400).json("Invalid parameter: ids");
+  }
+  if (tweetId === undefined) {
+    res.status(400).json("Invalid parameter: tweetId");
+  }
+
   try {
+    await checkAuthentication(req, res);
+
     const userTwitterClients = await getUserTwitterClients(
       supabaseClient,
       Array.isArray(ids) ? ids : [ids],

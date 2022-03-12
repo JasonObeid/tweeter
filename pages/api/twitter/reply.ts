@@ -10,9 +10,11 @@ export default async function ReplyTweetEndpoint(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  await checkAuthentication(req, res);
-
   const { tweetId } = req.query;
+
+  if (tweetId === undefined) {
+    res.status(400).json("Invalid parameter: tweetId");
+  }
 
   if (req.method !== "POST") {
     res.status(405).send({ message: "Only POST requests allowed" });
@@ -20,6 +22,8 @@ export default async function ReplyTweetEndpoint(
   }
 
   try {
+    await checkAuthentication(req, res);
+
     const users = JSON.parse(req.body) as unknown as TwitterAuthUser[];
     const ids = users.map((user) => user.id);
     const userTwitterClients = await getUserTwitterClients(

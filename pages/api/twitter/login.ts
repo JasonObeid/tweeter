@@ -8,11 +8,11 @@ export default async function TwitterLoginEndpoint(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  await checkAuthentication(req, res);
-
   const { state, code, sessionId } = req.query;
 
   try {
+    await checkAuthentication(req, res);
+
     const generatedAuthLinkResponse = await login(
       supabaseClient,
       twitterClient,

@@ -9,11 +9,18 @@ export default async function createTweetEndpoint(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  await checkAuthentication(req, res);
-
   const { ids, text } = req.query;
 
+  if (ids === undefined) {
+    res.status(400).json("Invalid parameter: ids");
+  }
+  if (text === undefined) {
+    res.status(400).json("Invalid parameter: text");
+  }
+
   try {
+    await checkAuthentication(req, res);
+
     const userTwitterClients = await getUserTwitterClients(
       supabaseClient,
       Array.isArray(ids) ? ids : [ids],

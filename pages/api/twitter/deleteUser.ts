@@ -8,11 +8,15 @@ export default async function DeleteUserEndpoint(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  await checkAuthentication(req, res);
-
   const { id } = req.query;
 
+  if (id === undefined) {
+    res.status(400).json("Invalid parameter: id");
+  }
+
   try {
+    await checkAuthentication(req, res);
+
     const deletedUser = await deleteUser(
       supabaseClient,
       twitterClient,

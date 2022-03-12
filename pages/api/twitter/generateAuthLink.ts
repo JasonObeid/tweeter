@@ -8,9 +8,9 @@ export default async function GenerateAuthLinkEndpoint(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  await checkAuthentication(req, res);
-
   try {
+    await checkAuthentication(req, res);
+
     const generatedAuthLinkResponse = await generateAuthLink(
       supabaseClient,
       twitterClient,
