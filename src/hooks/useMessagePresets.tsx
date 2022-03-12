@@ -99,25 +99,47 @@ export async function addMessagePreset(message: string) {
 export function useMessagePresets() {
   const queryClient = useQueryClient();
 
+  function addMessagePresets(newPreset: MessagePresets) {
+    const newPresets = [...(messagePresetsQuery.data ?? []), newPreset];
+    return newPresets;
+  }
+
+  function updateMessagePresets(newPreset: MessagePresets) {
+    const newPresets = [...(messagePresetsQuery.data ?? [])];
+    const currentPresetIndex = newPresets.findIndex(
+      (preset) => preset.id === newPreset.id,
+    );
+    if (currentPresetIndex >= 0) {
+      newPresets[currentPresetIndex] = newPreset;
+    }
+    return newPresets;
+  }
+
+  function removeMessagePresets(deletedPreset: MessagePresets) {
+    const newPresets = [...(messagePresetsQuery.data ?? [])];
+    return newPresets.filter((preset) => preset.id !== deletedPreset.id);
+  }
+
   const messagePresetsQuery = useQuery("messagePresets", getMessagePresets, {
     cacheTime: 5 * 60 * 1000,
     staleTime: 5 * 60 * 1000,
+    onSuccess: (data) => console.log(data),
     onError: (error) => {
       console.log(error);
     },
-    onSuccess: (data) => console.log(data),
   });
 
   const updateMessagePresetMutation = useMutation(updateMessagePreset, {
     mutationKey: "updateMessagePreset",
     onSuccess: (data) => {
       console.log(data);
+      queryClient.getQueryData;
+      queryClient.setQueryData("messagePresets", () =>
+        updateMessagePresets(data),
+      );
     },
     onError: (error) => {
       console.log(error);
-    },
-    onMutate: () => {
-      setTimeout(() => queryClient.invalidateQueries("messagePresets"), 1500);
     },
   });
 
@@ -125,12 +147,12 @@ export function useMessagePresets() {
     mutationKey: "removeMessagePreset",
     onSuccess: (data) => {
       console.log(data);
+      queryClient.setQueryData("messagePresets", () =>
+        removeMessagePresets(data),
+      );
     },
     onError: (error) => {
       console.log(error);
-    },
-    onMutate: () => {
-      setTimeout(() => queryClient.invalidateQueries("messagePresets"), 1500);
     },
   });
 
@@ -138,12 +160,10 @@ export function useMessagePresets() {
     mutationKey: "addMessagePreset",
     onSuccess: (data) => {
       console.log(data);
+      queryClient.setQueryData("messagePresets", () => addMessagePresets(data));
     },
     onError: (error) => {
       console.log(error);
-    },
-    onMutate: () => {
-      setTimeout(() => queryClient.invalidateQueries("messagePresets"), 1500);
     },
   });
 
