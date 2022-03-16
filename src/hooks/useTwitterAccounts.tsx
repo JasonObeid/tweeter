@@ -47,21 +47,36 @@ export function useTwitterAccounts() {
     onSuccess: (data) => console.log(data),
   });
 
-  async function removeUser(id: string) {
-    await get<void>(`/api/twitter/deleteUser?id=${id}`, {
-      token: session?.access_token,
-    });
+  function removeDeletedAccount(deletedAccount: TwitterAuth) {
+    const newAccounts = [...(twitterAccountsQuery.data ?? [])];
+    return newAccounts.filter((account) => account.id !== deletedAccount.id);
   }
+
+  async function removeUser(id: string) {
+    const deletedUser = await get<TwitterAuth>(
+      `/api/twitter/deleteUser?id=${id}`,
+      {
+        token: session?.access_token,
+      },
+    );
+
+    if (deletedUser === null) {
+      throw new Error("Deleted user was null");
+    }
+
+    return deletedUser;
+  }
+
   const removeTwitterUserMutation = useMutation(removeUser, {
     mutationKey: "removeTwitterUser",
     onSuccess: (data) => {
       console.log(data);
+      queryClient.setQueryData("twitterAccounts", () =>
+        removeDeletedAccount(data),
+      );
     },
     onError: (error) => {
       console.log(error);
-    },
-    onMutate: () => {
-      setTimeout(() => queryClient.invalidateQueries("twitterAccounts"), 1500);
     },
   });
 

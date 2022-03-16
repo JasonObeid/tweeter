@@ -133,7 +133,6 @@ export function useMessagePresets() {
     mutationKey: "updateMessagePreset",
     onSuccess: (data) => {
       console.log(data);
-      queryClient.getQueryData;
       queryClient.setQueryData("messagePresets", () =>
         updateMessagePresets(data),
       );

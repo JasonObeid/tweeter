@@ -2,6 +2,7 @@ import { Layout } from "../src/components/Layout";
 import EnforceAuthenticated from "../src/components/EnforceAuthenticated";
 import { useTwitterAccounts } from "../src/hooks/useTwitterAccounts";
 import { useTwitterLogin } from "../src/hooks/useTwitterLogin";
+import { LoadingSpinner } from "../src/components/LoadingSpinner";
 
 export const getServerSideProps = EnforceAuthenticated();
 
@@ -23,15 +24,19 @@ export default function TwitterAccounts() {
             return (
               <div
                 key={user.id}
-                className="mb-6 flex content-center sm:m-auto sm:mb-6 sm:w-56"
+                className="mb-6 flex content-center gap-5 sm:m-auto sm:mb-6 sm:w-56"
               >
                 <h2 className="flex flex-1 text-white">{user.username}</h2>
-                <button
-                  className="text-white"
-                  onClick={() => removeTwitterUserMutation.mutate(user.id)}
-                >
-                  x
-                </button>
+                {removeTwitterUserMutation.isLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <button
+                    className="text-white"
+                    onClick={() => removeTwitterUserMutation.mutate(user.id)}
+                  >
+                    x
+                  </button>
+                )}
               </div>
             );
           })}
