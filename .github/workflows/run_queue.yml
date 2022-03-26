@@ -1,13 +1,18 @@
-name: Run Engagement Queue
+name: Run Queues
 on:
   schedule:
-    - cron: "*/6 * * * *"
+    - cron: "*/11 * * * *"
 jobs:
   cron:
     runs-on: ubuntu-latest
     steps:
-      - name: Call our API route
+      - name: Call our API route 1
         run: |
           curl --request GET \
           --url 'https://tweeter-khaki.vercel.app/api/twitter/runEngagementQueue' \
+          --header 'Authorization: Bearer ${{ secrets.API_SECRET_KEY }}'
+      - name: Call our API route 2
+        run: |
+          curl --request GET \
+          --url 'https://tweeter-khaki.vercel.app/api/twitter/runFollowQueue' \
           --header 'Authorization: Bearer ${{ secrets.API_SECRET_KEY }}'

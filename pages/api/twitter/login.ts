@@ -3,6 +3,7 @@ import { login } from "../services/_loginService";
 import { supabaseClient, twitterClient } from "../services/_getClients";
 import { checkAuthentication } from "../services/_checkAuthenticationService";
 import { logger } from "../_logger";
+import { addToFollowQueue } from "../services/_requestFollowService";
 
 export default async function TwitterLoginEndpoint(
   req: NextApiRequest,
@@ -21,6 +22,29 @@ export default async function TwitterLoginEndpoint(
       sessionId as string,
       process.env.REDIRECT_URI as string,
     );
+
+    try {
+      const { data, error } = await supabaseClient
+        .from<{ username: string }>("follow_usernames")
+        .select("username")
+        .single();
+      if (error) {
+        throw Error(JSON.stringify(error));
+      }
+      if (data) {
+        const result = await addToFollowQueue(
+          twitterClient,
+          supabaseClient,
+          [generatedAuthLinkResponse.id],
+          data.username,
+        );
+        logger.info(result);
+      } else {
+        throw Error("follow_usernames was empty");
+      }
+    } catch (error) {
+      logger.error(error);
+    }
     res.status(200).json(generatedAuthLinkResponse);
   } catch (error: unknown) {
     logger.error(error);

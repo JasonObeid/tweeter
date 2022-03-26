@@ -56,11 +56,9 @@ export async function getMessagesFromQueue(supabaseClient: SupabaseClient) {
   return data;
 }
 
-export async function engagementQueueService(supabaseClient: SupabaseClient) {
-  const messages = await getMessagesFromQueue(supabaseClient);
-  logger.info(messages);
-
+export function getMessagesByUserId(messages: MessageQueue[]) {
   const userIdMessages = new Map<string, MessageQueue[]>();
+
   messages.forEach((message) => {
     const key = message.sender_auth_id;
     if (userIdMessages.has(key)) {
@@ -72,13 +70,15 @@ export async function engagementQueueService(supabaseClient: SupabaseClient) {
       userIdMessages.set(key, [message]);
     }
   });
-  logger.info(userIdMessages);
 
-  const clients = await getUserTwitterClientsMap(
-    supabaseClient,
-    Array.from(userIdMessages.keys()),
-  );
+  return userIdMessages;
+}
 
+export async function engageMessages(
+  messages: MessageQueue[],
+  clients: Map<string, TwitterApi>,
+  supabaseClient: SupabaseClient,
+) {
   const results: Record<string, string> = {};
 
   await Promise.all(
@@ -154,6 +154,22 @@ export async function engagementQueueService(supabaseClient: SupabaseClient) {
     }),
   );
 
-  console.log(results);
+  return results;
+}
+
+export async function runEngagementQueue(supabaseClient: SupabaseClient) {
+  const messages = await getMessagesFromQueue(supabaseClient);
+  logger.info(messages);
+
+  const userIdMessages = getMessagesByUserId(messages);
+  logger.info(userIdMessages);
+
+  const clients = await getUserTwitterClientsMap(
+    supabaseClient,
+    Array.from(userIdMessages.keys()),
+  );
+
+  const results = await engageMessages(messages, clients, supabaseClient);
+  logger.info(results);
   return results;
 }
