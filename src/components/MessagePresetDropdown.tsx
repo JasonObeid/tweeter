@@ -17,6 +17,7 @@ export function MessagePresetDropdown({
     <div className="mx-auto mb-10 w-52 sm:m-auto sm:mb-10 sm:w-56">
       <div className="flex content-center justify-between">
         <button
+          type={"button"}
           onClick={() => setIsOpen((isOpen) => !isOpen)}
           className="z-10 flex flex-1 self-center text-ellipsis rounded-md border border-transparent bg-white p-2 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:bg-gray-800 dark:text-white dark:focus:ring-blue-400 dark:focus:ring-opacity-40"
         >

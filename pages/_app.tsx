@@ -2,7 +2,6 @@ import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "../styles/globals.css";
 import LogRocket from "logrocket";
-import React from "react";
 import { AuthContextProvider } from "../src/context/AuthContext";
 import Head from "next/head";
 

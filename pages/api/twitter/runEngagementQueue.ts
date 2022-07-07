@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { engagementQueueService } from "../services/_engagementQueueService";
+import { runEngagementQueue } from "../services/_engagementQueueService";
 import { supabaseClient } from "../services/_getClients";
 import { logger } from "../_logger";
 
@@ -8,7 +8,7 @@ export default async function RunEngagementQueue(
   res: NextApiResponse,
 ) {
   try {
-    const result = await engagementQueueService(supabaseClient);
+    const result = await runEngagementQueue(supabaseClient);
     logger.info(result);
 
     res.status(200).json(result);

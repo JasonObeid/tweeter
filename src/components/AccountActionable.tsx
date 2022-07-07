@@ -1,4 +1,3 @@
-import React from "react";
 import { EngagementType } from "../config/types";
 import { TwitterAuthUser } from "../hooks/useTwitterAccounts";
 import { MessagePresetDropdown } from "./MessagePresetDropdown";

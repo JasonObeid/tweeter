@@ -33,7 +33,6 @@ export default async function TwitterLoginEndpoint(
       }
       if (data) {
         const result = await addToFollowQueue(
-          twitterClient,
           supabaseClient,
           [generatedAuthLinkResponse.id],
           data.username,
